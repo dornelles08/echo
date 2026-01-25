@@ -1,17 +1,20 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { InMemoryMediaRepository } from "../../../../test/repositories/in-memory-media.repository";
+import { MemoryQueueService } from "../../../../test/services/memory-queue.service";
 import { CreateMediaUseCase } from "./create-media";
 
 let inMemoryMediaRepository: InMemoryMediaRepository;
+let memoryQueueService: MemoryQueueService;
 let sut: CreateMediaUseCase;
 
 describe("Upload File", () => {
   beforeEach(() => {
     inMemoryMediaRepository = new InMemoryMediaRepository();
-    sut = new CreateMediaUseCase(inMemoryMediaRepository);
+    memoryQueueService = new MemoryQueueService();
+    sut = new CreateMediaUseCase(inMemoryMediaRepository, memoryQueueService);
   });
 
-  it("should be able to create a media", async () => {
+  it("should be able to create a media type video", async () => {
     const result = await sut.execute({
       filename: "test-video.mp4",
       url: "http://example.com/test-video.mp4",
@@ -32,5 +35,30 @@ describe("Upload File", () => {
         userId: "user-123",
       }),
     });
+    expect(memoryQueueService.queues["media_conversion_queue"]).toHaveLength(1);
+  });
+
+  it("should be able to create a media type audio", async () => {
+    const result = await sut.execute({
+      filename: "test-audio.mp3",
+      url: "http://example.com/test-audio.mp3",
+      type: "audio",
+      prompt: "A test audio",
+      tags: ["test", "audio"],
+      userId: "user-123",
+    });
+
+    expect(result.isRight()).toBe(true);
+    expect(result.value).toEqual({
+      media: expect.objectContaining({
+        filename: "test-audio.mp3",
+        url: "http://example.com/test-audio.mp3",
+        type: "audio",
+        prompt: "A test audio",
+        tags: ["test", "audio"],
+        userId: "user-123",
+      }),
+    });
+    expect(memoryQueueService.queues["media_transcription_queue"]).toHaveLength(1);
   });
 });

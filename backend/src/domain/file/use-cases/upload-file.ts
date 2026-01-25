@@ -1,7 +1,7 @@
-import { left, right, type Either } from "@/core/either";
+import { type Either, left, right } from "@/core/either";
 import { UnknownError } from "@/core/errors/unknow.error";
 import { File } from "../entities/File";
-import type { StorageService } from "../service/storage.service";
+import type { StorageService } from "../services/storage.service";
 
 interface UploadFileUseCaseRequest {
   filename: string;

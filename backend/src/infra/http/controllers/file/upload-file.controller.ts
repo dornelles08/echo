@@ -1,5 +1,6 @@
-import { makeUploadFileUseCase } from "@/infra/factories/file/upload-file.factory";
 import type { FastifyReply, FastifyRequest } from "fastify";
+
+import { makeUploadFileUseCase } from "@/infra/factories/file/upload-file.factory";
 
 export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
   const data = await request.file();

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 
-import { MemoryStorageService } from "../../../../test/services/memory-storage.servive";
+import { MemoryStorageService } from "../../../../test/services/memory-storage.service";
 import { UploadFileUseCase } from "./upload-file";
 
 let memoryStorageService: MemoryStorageService;

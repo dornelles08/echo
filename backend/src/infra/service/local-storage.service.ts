@@ -1,4 +1,4 @@
-import type { StorageService } from "@/domain/file/service/storage.service";
+import type { StorageService } from "@/domain/file/services/storage.service";
 import { env } from "../env";
 
 export class LocalStorageService implements StorageService {

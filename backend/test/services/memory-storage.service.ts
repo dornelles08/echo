@@ -1,4 +1,4 @@
-import type { StorageService } from "@/domain/file/service/storage.service";
+import type { StorageService } from "@/domain/file/services/storage.service";
 
 export class MemoryStorageService implements StorageService {
   saveFile(content: Buffer | Uint8Array, filename: string): Promise<string> {
