@@ -1,5 +1,5 @@
 import { type Either, left, right } from "@/core/either";
-import { UnknownError } from "@/core/errors/unknow.error";
+import { UnknowError } from "@/core/errors/unknow.error";
 import { File } from "../entities/File";
 import type { StorageService } from "../services/storage.service";
 
@@ -8,7 +8,7 @@ interface UploadFileUseCaseRequest {
   content: Buffer | Uint8Array;
 }
 
-type UploadFileUseCaseResponse = Either<UnknownError, { file: File }>;
+type UploadFileUseCaseResponse = Either<UnknowError, { file: File }>;
 
 export class UploadFileUseCase {
   constructor(private readonly storageService: StorageService) {}
@@ -19,11 +19,11 @@ export class UploadFileUseCase {
   }: UploadFileUseCaseRequest): Promise<UploadFileUseCaseResponse> {
     try {
       const url = await this.storageService.saveFile(content, filename);
-      const file = new File({ name: filename, url });
+      const file = File.create({ name: filename, url });
 
       return right({ file });
     } catch (error) {
-      return left(new UnknownError(error));
+      return left(new UnknowError(error));
     }
   }
 }

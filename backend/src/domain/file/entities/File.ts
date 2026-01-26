@@ -1,23 +1,21 @@
-interface FileProps {
-  id?: string;
+import { Entity } from "@/core/entity";
+
+export interface FileProps {
   name: string;
   url: string;
 }
 
-export class File {
-  constructor(public readonly props: FileProps) {
-    this.props.id = this.props.id ?? crypto.randomUUID();
-  }
-
-  get id(): string | undefined {
-    return this.props.id;
-  }
-
-  get name(): string {
+export class File extends Entity<FileProps> {
+  get name() {
     return this.props.name;
   }
 
-  get url(): string {
+  get url() {
     return this.props.url;
+  }
+
+  static create(props: FileProps, id?: string) {
+    const file = new File(props, id);
+    return file;
   }
 }

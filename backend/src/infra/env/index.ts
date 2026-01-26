@@ -3,11 +3,11 @@ import { z } from "zod";
 const envSchema = z.object({
   NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
   // CLIENT_ORIGIN: z.string().default("http://localhost:3000"),
-  // DATABASE_URL: z.string(),
-  // JWT_SECRET: z.string(),
+  JWT_SECRET: z.string(),
   UPLOAD_DIR: z.string().default("../uploads"),
-  MONGO_URI: z.string(),
-  REDIS_URI: z.string(),
+  DATABASE_URL: z.string(),
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number().default(6379),
   PORT: z.coerce.number().default(3333),
 });
 

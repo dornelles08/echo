@@ -28,7 +28,7 @@ export class CreateMediaUseCase {
     tags,
     userId,
   }: CreateMediaUseCaseRequest): Promise<CreateMediaUseCaseResponse> {
-    const media = new Media({
+    const media = Media.create({
       filename,
       url,
       type,

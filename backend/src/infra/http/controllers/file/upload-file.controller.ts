@@ -9,6 +9,9 @@ export async function uploadFile(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(400).send({ error: "No file uploaded" });
   }
 
+  console.log(request.user);
+  
+
   const buffer = await data.toBuffer();
   const file = new Uint8Array(buffer);
   const filename = data.filename;

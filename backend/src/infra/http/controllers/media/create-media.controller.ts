@@ -1,6 +1,7 @@
-import { makeCreateMediaUseCase } from "@/infra/factories/media/create-media.factory";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
+
+import { makeCreateMediaUseCase } from "@/infra/factories/media/create-media.factory";
 
 export async function createMedia(request: FastifyRequest, reply: FastifyReply) {
   const createMediaBodySchema = z.object({
@@ -13,15 +14,17 @@ export async function createMedia(request: FastifyRequest, reply: FastifyReply) 
 
   const { filename, url, prompt, tags, type } = createMediaBodySchema.parse(request.body);
 
-  const CreateMediaUseCase = makeCreateMediaUseCase();
+  const { sub: userId } = request.user;
 
-  const result = await CreateMediaUseCase.execute({
+  const createMediaUseCase = makeCreateMediaUseCase();
+
+  const result = await createMediaUseCase.execute({
     filename,
     url,
     prompt,
     tags,
     type,
-    userId: "1",
+    userId,
   });
 
   if (result.isLeft()) {
