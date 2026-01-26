@@ -1,15 +1,18 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 
 import { InMemoryUserRepository } from "@test/repositories/in-memory-user.repository";
+import { FakeCryptService } from "@test/services/fake-crypt.service";
 import { CreateUserUseCase } from "./create-user";
 
 let inMemoryUserRepository: InMemoryUserRepository;
+let fakeCryptService: FakeCryptService;
 let sut: CreateUserUseCase;
 
 describe("Create User", () => {
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
-    sut = new CreateUserUseCase(inMemoryUserRepository);
+    fakeCryptService = new FakeCryptService();
+    sut = new CreateUserUseCase(inMemoryUserRepository, fakeCryptService);
   });
 
   it("should be able to create a new user", async () => {

@@ -25,6 +25,7 @@ model Media {
   filename      String
   url           String
   type          String
+  status        String   @default("pending")
   prompt        String?
   transcription String?
   tags          String[]

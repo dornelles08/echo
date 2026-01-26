@@ -4,12 +4,13 @@ import type { Media } from "../entities/Media";
 export interface MediaFilters {
   type?: string;
   tags?: string[];
+  status?: string;
 }
 
 export interface MediaRepository {
   create(media: Media): Promise<void>;
   findAll(
-    userId?: string,
+    userId: string,
     filters?: MediaFilters,
     filterpagination?: PaginationParams,
   ): Promise<Media[]>;

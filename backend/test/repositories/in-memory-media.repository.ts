@@ -25,6 +25,9 @@ export class InMemoryMediaRepository implements MediaRepository {
     if (filters?.tags && filters.tags.length > 0) {
       result = result.filter((media) => filters.tags?.every((tag) => media.tags?.includes(tag)));
     }
+    if (filters?.status) {
+      result = result.filter((media) => media.status === filters.status);
+    }
 
     if (filterpagination) {
       const { page, perPage } = filterpagination;

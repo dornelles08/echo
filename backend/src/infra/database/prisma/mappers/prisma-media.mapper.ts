@@ -26,6 +26,7 @@ export namespace PrismaMediaMapper {
       url: media.url,
       type: media.type as "video" | "audio",
       tags: media.tags,
+      status: media.status,
       prompt: media.prompt,
       transcription: media.transcription,
       userId: media.userId,

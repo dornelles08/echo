@@ -7,7 +7,7 @@ let inMemoryMediaRepository: InMemoryMediaRepository;
 let memoryQueueService: MemoryQueueService;
 let sut: CreateMediaUseCase;
 
-describe("Upload File", () => {
+describe("Create Media", () => {
   beforeEach(() => {
     inMemoryMediaRepository = new InMemoryMediaRepository();
     memoryQueueService = new MemoryQueueService();

@@ -29,6 +29,7 @@ export type MediaMinAggregateOutputType = {
   filename: string | null
   url: string | null
   type: string | null
+  status: string | null
   prompt: string | null
   transcription: string | null
   userId: string | null
@@ -41,6 +42,7 @@ export type MediaMaxAggregateOutputType = {
   filename: string | null
   url: string | null
   type: string | null
+  status: string | null
   prompt: string | null
   transcription: string | null
   userId: string | null
@@ -53,6 +55,7 @@ export type MediaCountAggregateOutputType = {
   filename: number
   url: number
   type: number
+  status: number
   prompt: number
   transcription: number
   tags: number
@@ -68,6 +71,7 @@ export type MediaMinAggregateInputType = {
   filename?: true
   url?: true
   type?: true
+  status?: true
   prompt?: true
   transcription?: true
   userId?: true
@@ -80,6 +84,7 @@ export type MediaMaxAggregateInputType = {
   filename?: true
   url?: true
   type?: true
+  status?: true
   prompt?: true
   transcription?: true
   userId?: true
@@ -92,6 +97,7 @@ export type MediaCountAggregateInputType = {
   filename?: true
   url?: true
   type?: true
+  status?: true
   prompt?: true
   transcription?: true
   tags?: true
@@ -178,6 +184,7 @@ export type MediaGroupByOutputType = {
   filename: string
   url: string
   type: string
+  status: string
   prompt: string | null
   transcription: string | null
   tags: string[]
@@ -212,6 +219,7 @@ export type MediaWhereInput = {
   filename?: Prisma.StringFilter<"Media"> | string
   url?: Prisma.StringFilter<"Media"> | string
   type?: Prisma.StringFilter<"Media"> | string
+  status?: Prisma.StringFilter<"Media"> | string
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
   tags?: Prisma.StringNullableListFilter<"Media">
@@ -226,6 +234,7 @@ export type MediaOrderByWithRelationInput = {
   filename?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -243,6 +252,7 @@ export type MediaWhereUniqueInput = Prisma.AtLeast<{
   filename?: Prisma.StringFilter<"Media"> | string
   url?: Prisma.StringFilter<"Media"> | string
   type?: Prisma.StringFilter<"Media"> | string
+  status?: Prisma.StringFilter<"Media"> | string
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
   tags?: Prisma.StringNullableListFilter<"Media">
@@ -257,6 +267,7 @@ export type MediaOrderByWithAggregationInput = {
   filename?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -276,6 +287,7 @@ export type MediaScalarWhereWithAggregatesInput = {
   filename?: Prisma.StringWithAggregatesFilter<"Media"> | string
   url?: Prisma.StringWithAggregatesFilter<"Media"> | string
   type?: Prisma.StringWithAggregatesFilter<"Media"> | string
+  status?: Prisma.StringWithAggregatesFilter<"Media"> | string
   prompt?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
   transcription?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
   tags?: Prisma.StringNullableListFilter<"Media">
@@ -289,6 +301,7 @@ export type MediaCreateInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -302,6 +315,7 @@ export type MediaUncheckedCreateInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -314,6 +328,7 @@ export type MediaUpdateInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -326,6 +341,7 @@ export type MediaUncheckedUpdateInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -339,6 +355,7 @@ export type MediaCreateManyInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -351,6 +368,7 @@ export type MediaUpdateManyMutationInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -362,6 +380,7 @@ export type MediaUncheckedUpdateManyInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -393,6 +412,7 @@ export type MediaCountOrderByAggregateInput = {
   filename?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -406,6 +426,7 @@ export type MediaMaxOrderByAggregateInput = {
   filename?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -418,6 +439,7 @@ export type MediaMinOrderByAggregateInput = {
   filename?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -486,6 +508,7 @@ export type MediaCreateWithoutUserInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -498,6 +521,7 @@ export type MediaUncheckedCreateWithoutUserInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -538,6 +562,7 @@ export type MediaScalarWhereInput = {
   filename?: Prisma.StringFilter<"Media"> | string
   url?: Prisma.StringFilter<"Media"> | string
   type?: Prisma.StringFilter<"Media"> | string
+  status?: Prisma.StringFilter<"Media"> | string
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
   tags?: Prisma.StringNullableListFilter<"Media">
@@ -551,6 +576,7 @@ export type MediaCreateManyUserInput = {
   filename: string
   url: string
   type: string
+  status?: string
   prompt?: string | null
   transcription?: string | null
   tags?: Prisma.MediaCreatetagsInput | string[]
@@ -562,6 +588,7 @@ export type MediaUpdateWithoutUserInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -573,6 +600,7 @@ export type MediaUncheckedUpdateWithoutUserInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -584,6 +612,7 @@ export type MediaUncheckedUpdateManyWithoutUserInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.MediaUpdatetagsInput | string[]
@@ -598,6 +627,7 @@ export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   filename?: boolean
   url?: boolean
   type?: boolean
+  status?: boolean
   prompt?: boolean
   transcription?: boolean
   tags?: boolean
@@ -614,6 +644,7 @@ export type MediaSelectScalar = {
   filename?: boolean
   url?: boolean
   type?: boolean
+  status?: boolean
   prompt?: boolean
   transcription?: boolean
   tags?: boolean
@@ -622,7 +653,7 @@ export type MediaSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "url" | "type" | "prompt" | "transcription" | "tags" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
+export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "url" | "type" | "status" | "prompt" | "transcription" | "tags" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
 export type MediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -637,6 +668,7 @@ export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     filename: string
     url: string
     type: string
+    status: string
     prompt: string | null
     transcription: string | null
     tags: string[]
@@ -1040,6 +1072,7 @@ export interface MediaFieldRefs {
   readonly filename: Prisma.FieldRef<"Media", 'String'>
   readonly url: Prisma.FieldRef<"Media", 'String'>
   readonly type: Prisma.FieldRef<"Media", 'String'>
+  readonly status: Prisma.FieldRef<"Media", 'String'>
   readonly prompt: Prisma.FieldRef<"Media", 'String'>
   readonly transcription: Prisma.FieldRef<"Media", 'String'>
   readonly tags: Prisma.FieldRef<"Media", 'String[]'>
