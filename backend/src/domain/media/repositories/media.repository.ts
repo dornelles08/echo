@@ -14,7 +14,7 @@ export interface MediaRepository {
     filters?: MediaFilters,
     filterpagination?: PaginationParams,
   ): Promise<Media[]>;
-  findById(id: string): Promise<Media | null>;
+  findById(id: string, userId: string): Promise<Media | null>;
   save(media: Media): Promise<void>;
   delete(id: string): Promise<void>;
 }

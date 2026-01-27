@@ -53,9 +53,9 @@ export class PrismaMediaRepository implements MediaRepository {
     return medias.map(PrismaMediaMapper.toDomain);
   }
 
-  async findById(id: string): Promise<Media | null> {
+  async findById(id: string, userId: string): Promise<Media | null> {
     const media = await prisma.media.findUnique({
-      where: { id },
+      where: { id, userId },
     });
 
     if (!media) {

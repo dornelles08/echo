@@ -11,6 +11,7 @@ export namespace PrismaMediaMapper {
         type: raw.type as "video" | "audio",
         prompt: raw.prompt ? raw.prompt : undefined,
         transcription: raw.transcription ? raw.transcription : undefined,
+        status: raw.status,
         tags: raw.tags,
         userId: raw.userId,
         createdAt: raw.createdAt,
