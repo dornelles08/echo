@@ -11,7 +11,15 @@ interface FetchMediaUseCaseRequest {
   perPage: number;
 }
 
-type FetchMediaUseCaseResponse = Either<null, { medias: Media[] }>;
+type FetchMediaUseCaseResponse = Either<null, { 
+  medias: Media[];
+  meta: {
+    page: number;
+    perPage: number;
+    total: number;
+    totalPages: number;
+  };
+}>;
 
 export class FetchMediasUseCase {
   constructor(private readonly mediaRepository: MediaRepository) {}
@@ -24,7 +32,7 @@ export class FetchMediasUseCase {
     type,
     status,
   }: FetchMediaUseCaseRequest): Promise<FetchMediaUseCaseResponse> {
-    const medias = await this.mediaRepository.findAll(
+    const result = await this.mediaRepository.findAll(
       userId,
       {
         tags,
@@ -37,6 +45,16 @@ export class FetchMediasUseCase {
       },
     );
 
-    return right({ medias });
+    const totalPages = Math.ceil(result.total / perPage);
+
+    return right({ 
+      medias: result.medias,
+      meta: {
+        page,
+        perPage,
+        total: result.total,
+        totalPages,
+      },
+    });
   }
 }

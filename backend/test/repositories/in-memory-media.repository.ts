@@ -9,11 +9,26 @@ export class InMemoryMediaRepository implements MediaRepository {
     this.items.push(media);
   }
 
+  async findById(id: string): Promise<Media | null> {
+    return this.items.find((item) => item.id === id) || null;
+  }
+
+  async save(media: Media): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === media.id);
+    if (index >= 0) {
+      this.items[index] = media;
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    this.items = this.items.filter((item) => item.id !== id);
+  }
+
   async findAll(
     userId?: string,
     filters?: MediaFilters,
     filterpagination?: PaginationParams,
-  ): Promise<Media[]> {
+  ): Promise<{ medias: Media[]; total: number }> {
     let result = this.items;
 
     if (userId) {
@@ -29,6 +44,8 @@ export class InMemoryMediaRepository implements MediaRepository {
       result = result.filter((media) => media.status === filters.status);
     }
 
+    const total = result.length;
+
     if (filterpagination) {
       const { page, perPage } = filterpagination;
       const start = (page - 1) * perPage;
@@ -36,22 +53,9 @@ export class InMemoryMediaRepository implements MediaRepository {
       result = result.slice(start, end);
     }
 
-    return result;
-  }
-
-  async findById(id: string): Promise<Media | null> {
-    const media = this.items.find((item) => item.id === id) || null;
-    return media;
-  }
-
-  async save(media: Media): Promise<void> {
-    const index = this.items.findIndex((item) => item.id === media.id);
-    if (index >= 0) {
-      this.items[index] = media;
-    }
-  }
-
-  async delete(id: string): Promise<void> {
-    this.items = this.items.filter((item) => item.id !== id);
+    return {
+      medias: result,
+      total,
+    };
   }
 }

@@ -32,6 +32,12 @@ describe("Fetch Media", () => {
           userId: "user-123",
         }),
       ]),
+      meta: expect.objectContaining({
+        page: 1,
+        perPage: 10,
+        total: 1,
+        totalPages: 1,
+      }),
     });
   });
 
@@ -54,6 +60,9 @@ describe("Fetch Media", () => {
 
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(totalMediasVideo);
+    expect(result.value?.meta.total).toBe(totalMediasVideo);
+    expect(result.value?.meta.page).toBe(1);
+    expect(result.value?.meta.perPage).toBe(10);
   });
 
   it("should be able to fetch a media type audio", async () => {
@@ -75,6 +84,9 @@ describe("Fetch Media", () => {
 
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(totalMediasAudio);
+    expect(result.value?.meta.total).toBe(totalMediasAudio);
+    expect(result.value?.meta.page).toBe(1);
+    expect(result.value?.meta.perPage).toBe(10);
   });
 
   it("should be able to fetch a media paginated", async () => {
@@ -93,6 +105,10 @@ describe("Fetch Media", () => {
 
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(10);
+    expect(result.value?.meta.total).toBe(21);
+    expect(result.value?.meta.page).toBe(1);
+    expect(result.value?.meta.perPage).toBe(10);
+    expect(result.value?.meta.totalPages).toBe(3);
   });
 
   it("should be able to fetch a media paginated with more than 10 items", async () => {
@@ -111,6 +127,10 @@ describe("Fetch Media", () => {
 
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(1);
+    expect(result.value?.meta.total).toBe(21);
+    expect(result.value?.meta.page).toBe(3);
+    expect(result.value?.meta.perPage).toBe(10);
+    expect(result.value?.meta.totalPages).toBe(3);
   });
 
   it("should be able to fetch a media by status", async () => {
@@ -133,5 +153,8 @@ describe("Fetch Media", () => {
 
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(totalMediasPending);
+    expect(result.value?.meta.total).toBe(totalMediasPending);
+    expect(result.value?.meta.page).toBe(1);
+    expect(result.value?.meta.perPage).toBe(10);
   });
 });

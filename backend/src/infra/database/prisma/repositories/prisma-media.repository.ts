@@ -19,7 +19,7 @@ export class PrismaMediaRepository implements MediaRepository {
     userId?: string,
     filters?: MediaFilters,
     filterpagination?: PaginationParams,
-  ): Promise<Media[]> {
+  ): Promise<{ medias: Media[]; total: number }> {
     const whereClause: any = {};
 
     if (userId) {
@@ -44,13 +44,19 @@ export class PrismaMediaRepository implements MediaRepository {
     const perPage = filterpagination?.perPage ?? 10;
     const skip = (page - 1) * perPage;
 
-    const medias = await prisma.media.findMany({
-      where: whereClause,
-      skip,
-      take: perPage,
-    });
+    const [medias, total] = await Promise.all([
+      prisma.media.findMany({
+        where: whereClause,
+        skip,
+        take: perPage,
+      }),
+      prisma.media.count({ where: whereClause }),
+    ]);
 
-    return medias.map(PrismaMediaMapper.toDomain);
+    return {
+      medias: medias.map(PrismaMediaMapper.toDomain),
+      total,
+    };
   }
 
   async findById(id: string, userId: string): Promise<Media | null> {
