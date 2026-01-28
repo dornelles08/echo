@@ -2,6 +2,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 import { makeGetMediaUseCase } from "@/infra/factories/media/get-media.factory";
+import { MediaPresenter } from "@/infra/http/presenters/media.presenter";
 
 export async function getMedia(request: FastifyRequest, reply: FastifyReply) {
   const getMediaParamsSchema = z.object({
@@ -25,5 +26,5 @@ export async function getMedia(request: FastifyRequest, reply: FastifyReply) {
 
   const { media } = result.value;
 
-  return reply.status(200).send({ media });
+  return reply.status(200).send({ media: MediaPresenter.toHTTP(media) });
 }

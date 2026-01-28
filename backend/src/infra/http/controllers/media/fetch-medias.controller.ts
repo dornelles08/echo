@@ -2,6 +2,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 import { makeFetchMediasUseCase } from "@/infra/factories/media/fetch-medias.factory";
+import { MediaPresenter } from "@/infra/http/presenters/media.presenter";
 
 export async function fetchMedias(request: FastifyRequest, reply: FastifyReply) {
   const fetchmediasQuerySchema = z.object({
@@ -35,7 +36,7 @@ export async function fetchMedias(request: FastifyRequest, reply: FastifyReply) 
     return reply.status(500).send();
   }
 
-  const { medias } = result.value;
+  const { medias, meta } = result.value;
 
-  return reply.status(200).send({ medias });
+  return reply.status(200).send(MediaPresenter.toHTTPCollection(medias, meta));
 }
