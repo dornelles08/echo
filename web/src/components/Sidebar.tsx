@@ -1,13 +1,14 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import {
-  FileText,
-  FolderOpen,
-  LayoutDashboard,
-  Settings,
-  Sparkles,
+	FileText,
+	FolderOpen,
+	LayoutDashboard,
+	LogOut,
+	Sparkles,
 } from "lucide-react";
-
+import { useLogout } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { Logo } from "./Logo";
 
 const menuItems = [
 	{
@@ -34,18 +35,14 @@ const menuItems = [
 
 export function Sidebar() {
 	const location = useLocation();
+	const logoutMutation = useLogout();
 
 	return (
 		<aside className="w-60 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 flex flex-col">
 			{/* Logo */}
 			<div className="p-6 border-b border-stone-200 dark:border-stone-800">
 				<Link to="/dashboard" className="flex items-center gap-3">
-					<div className="w-8 h-8 rounded-full bg-linear-to-br from-teal-500 to-teal-700 flex items-center justify-center">
-						<div className="w-2 h-2 bg-white rounded-full"></div>
-					</div>
-					<span className="text-xl font-semibold text-stone-900 dark:text-white">
-						echo
-					</span>
+					<Logo />
 				</Link>
 			</div>
 
@@ -78,16 +75,8 @@ export function Sidebar() {
 
 			{/* Bottom Section */}
 			<div className="p-4 border-t border-stone-200 dark:border-stone-800">
-				<Link
-					to="/settings"
-					className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors"
-				>
-					<Settings className="w-5 h-5" />
-					Configurações
-				</Link>
-
 				{/* User Info */}
-				<div className="mt-4 flex items-center gap-3 px-3 py-2">
+				<div className="flex items-center gap-3 px-3 py-2">
 					<div className="w-9 h-9 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-sm font-semibold">
 						JD
 					</div>
@@ -99,6 +88,14 @@ export function Sidebar() {
 							Plano Pro
 						</p>
 					</div>
+					<button
+						type="button"
+						onClick={() => logoutMutation.mutate()}
+						className="p-2 rounded-lg text-stone-600 dark:text-stone-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors"
+						title="Sair"
+					>
+						<LogOut className="w-4 h-4" />
+					</button>
 				</div>
 			</div>
 		</aside>

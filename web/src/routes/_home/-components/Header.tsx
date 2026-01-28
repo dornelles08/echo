@@ -1,8 +1,8 @@
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemeContext";
 import { Link } from "@tanstack/react-router";
 import { Moon, Sun } from "lucide-react";
-import logo from "../../../assets/Echo Light 1650x650 - sem fundo.png";
 
 export function Header() {
 	const { theme, toggleTheme } = useTheme();
@@ -11,7 +11,7 @@ export function Header() {
 		<header className="fixed top-0 left-0 right-0 z-50 bg-stone-100/80 dark:bg-stone-900/80 backdrop-blur-sm border-b border-stone-200 dark:border-stone-800">
 			<div className="container mx-auto px-4 py-4">
 				<div className="flex items-center justify-between">
-					<img src={logo} alt="Echo" className="h-16" />
+					<Logo />
 
 					<nav className="hidden md:flex items-center gap-8">
 						<a
