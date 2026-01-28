@@ -20,4 +20,5 @@ export interface MediaRepository {
   findById(id: string, userId: string): Promise<Media | null>;
   save(media: Media): Promise<void>;
   delete(id: string): Promise<void>;
+  findUserTags(userId: string): Promise<string[]>;
 }

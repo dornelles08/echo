@@ -8,6 +8,7 @@ import { env } from "./infra/env";
 import { authRoutes } from "./infra/http/routes/auth.routes";
 import { fileRoutes } from "./infra/http/routes/file.routes";
 import { mediaRoutes } from "./infra/http/routes/media.routes";
+import { tagRoutes } from "./infra/http/routes/tag.routes";
 import { userRoutes } from "./infra/http/routes/user.routes";
 
 export const app = fastify({
@@ -43,3 +44,4 @@ app.register(fileRoutes, { prefix: "/files" });
 app.register(mediaRoutes, { prefix: "/medias" });
 app.register(userRoutes, { prefix: "/users" });
 app.register(authRoutes);
+app.register(tagRoutes, { prefix: "/tags" });

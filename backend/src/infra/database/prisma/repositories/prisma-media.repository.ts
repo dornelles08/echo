@@ -5,7 +5,6 @@ import type { Media } from "@/domain/media/entities/Media";
 import type { MediaFilters, MediaRepository } from "@/domain/media/repositories/media.repository";
 import { prisma } from "..";
 import { PrismaMediaMapper } from "../mappers/prisma-media.mapper";
-
 export class PrismaMediaRepository implements MediaRepository {
   async create(media: Media): Promise<void> {
     const data = PrismaMediaMapper.toPrisma(media);
@@ -84,5 +83,35 @@ export class PrismaMediaRepository implements MediaRepository {
     await prisma.media.delete({
       where: { id },
     });
+  }
+
+  async findUserTags(userId: string): Promise<string[]> {
+    const result = await prisma.media.aggregateRaw({
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ["$userId", { $toObjectId: userId }],
+            },
+          },
+        },
+        { $unwind: "$tags" },
+        {
+          $group: {
+            _id: null,
+            tags: { $addToSet: "$tags" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            tags: 1,
+          },
+        },
+      ],
+    });
+
+    const tags = (result[0] as { tags?: string[] } | undefined)?.tags;
+    return tags || [];
   }
 }

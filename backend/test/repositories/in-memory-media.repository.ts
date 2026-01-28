@@ -58,4 +58,10 @@ export class InMemoryMediaRepository implements MediaRepository {
       total,
     };
   }
+
+  async findUserTags(userId: string): Promise<string[]> {
+    const userMedias = this.items.filter((media) => media.userId === userId);
+    const allTags = userMedias.flatMap((media) => media.tags || []);
+    return [...new Set(allTags)];
+  }
 }
