@@ -1,6 +1,7 @@
+import { FileIcon } from "lucide-react";
+
 import { StatusBadge } from "@/components/StatusBadge";
 import type { Media } from "@/types/media";
-import { FileIcon } from "lucide-react";
 import { MediaIcon } from "./MediaIcon";
 
 interface MediaTableRowProps {
@@ -21,26 +22,19 @@ export function MediaTableRow({ media, onClick }: MediaTableRowProps) {
 						<FileIcon className="w-5 h-5 text-stone-600 dark:text-stone-400" />
 					</div>
 					<span className="text-sm font-medium text-stone-900 dark:text-white">
-						{media.name}
+						{media.filename}
 					</span>
 				</div>
 			</td>
 
 			{/* Tipo */}
-			<td className="px-6 py-4">
+			<td className="px-6 py-4 flex">
 				<MediaIcon type={media.type} />
 			</td>
 
 			{/* Status */}
 			<td className="px-6 py-4">
 				<StatusBadge status={media.status} />
-			</td>
-
-			{/* Duração */}
-			<td className="px-6 py-4">
-				<span className="text-sm text-stone-600 dark:text-stone-400">
-					{media.duration}
-				</span>
 			</td>
 
 			{/* Tags */}

@@ -18,7 +18,7 @@ const statusConfig = {
 		label: "Transcrevendo...",
 		className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
 	},
-	waiting: {
+	pending: {
 		label: "Aguardando",
 		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
 	},

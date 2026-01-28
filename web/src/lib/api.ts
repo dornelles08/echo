@@ -18,7 +18,6 @@ api.interceptors.request.use(
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
-
 		return config;
 	},
 	(error) => {
@@ -30,10 +29,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
 	(response) => response,
 	(error) => {
+		console.log("API Error:", error.response?.status, error.response?.data);
 		if (error.response?.status === 401) {
-			// Token inválido ou expirado
+			console.log("401 Error - removing token");
 			localStorage.removeItem("auth_token");
-			// window.location.href = "/sign-in";
+			window.location.href = "/sign-in";
 		}
 
 		return Promise.reject(error);

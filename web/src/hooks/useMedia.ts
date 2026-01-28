@@ -5,8 +5,9 @@ import type { Media, PaginationInfo } from "@/types/media";
 
 interface GetMediasParams {
 	page?: number;
-	limit?: number;
-	search?: string;
+	perPage?: number;
+	tags?: string[];
+	type?: string;
 	status?: string;
 }
 

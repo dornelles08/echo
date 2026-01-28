@@ -73,7 +73,7 @@ export function useSocialLogin() {
 export function useLogout() {
 	return useMutation({
 		mutationFn: async () => {
-			await api.post("/auth/logout");
+			// await api.post("/auth/logout");
 		},
 		onSuccess: () => {
 			// Remove dados de autenticação

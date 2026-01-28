@@ -4,23 +4,25 @@ export type MediaStatus =
 	| "completed"
 	| "processing"
 	| "transcribing"
-	| "waiting"
+	| "pending"
 	| "error";
 
 export interface Media {
 	id: string;
-	name: string;
-	type: MediaType;
+	filename: string;
+	url: string;
+	type: "video" | "audio";
+	prompt?: string;
+	transcription?: string;
 	status: MediaStatus;
-	duration: string;
 	tags: string[];
-	createdAt: string;
-	updatedAt: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 export interface PaginationInfo {
-	currentPage: number;
+	page: number;
+	perPage: number;
+	total: number;
 	totalPages: number;
-	totalItems: number;
-	itemsPerPage: number;
 }
