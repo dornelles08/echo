@@ -12,10 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticateRouteImport } from './routes/_authenticate'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticateDashboardRouteImport } from './routes/_authenticate/dashboard'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as AuthenticateDashboardIndexRouteImport } from './routes/_authenticate/dashboard/index'
 
 const AuthenticateRoute = AuthenticateRouteImport.update({
   id: '/_authenticate',
@@ -29,11 +29,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticateDashboardRoute = AuthenticateDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticateRoute,
 } as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
   id: '/sign-up',
@@ -50,20 +45,26 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthenticateDashboardIndexRoute =
+  AuthenticateDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticateRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/dashboard': typeof AuthenticateDashboardRoute
+  '/dashboard/': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/dashboard': typeof AuthenticateDashboardRoute
+  '/dashboard': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -73,11 +74,11 @@ export interface FileRoutesById {
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
-  '/_authenticate/dashboard': typeof AuthenticateDashboardRoute
+  '/_authenticate/dashboard/': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot-password' | '/sign-in' | '/sign-up' | '/dashboard'
+  fullPaths: '/' | '/forgot-password' | '/sign-in' | '/sign-up' | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/forgot-password' | '/sign-in' | '/sign-up' | '/dashboard'
   id:
@@ -88,7 +89,7 @@ export interface FileRouteTypes {
     | '/_auth/forgot-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
-    | '/_authenticate/dashboard'
+    | '/_authenticate/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -120,13 +121,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticate/dashboard': {
-      id: '/_authenticate/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticateDashboardRouteImport
-      parentRoute: typeof AuthenticateRoute
-    }
     '/_auth/sign-up': {
       id: '/_auth/sign-up'
       path: '/sign-up'
@@ -148,6 +142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_authenticate/dashboard/': {
+      id: '/_authenticate/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticateDashboardIndexRouteImport
+      parentRoute: typeof AuthenticateRoute
+    }
   }
 }
 
@@ -166,11 +167,11 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticateRouteChildren {
-  AuthenticateDashboardRoute: typeof AuthenticateDashboardRoute
+  AuthenticateDashboardIndexRoute: typeof AuthenticateDashboardIndexRoute
 }
 
 const AuthenticateRouteChildren: AuthenticateRouteChildren = {
-  AuthenticateDashboardRoute: AuthenticateDashboardRoute,
+  AuthenticateDashboardIndexRoute: AuthenticateDashboardIndexRoute,
 }
 
 const AuthenticateRouteWithChildren = AuthenticateRoute._addFileChildren(
