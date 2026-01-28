@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLogin, useSocialLogin, type Provider } from "@/hooks/useAuth";
+import { type Provider, useLogin, useSocialLogin } from "@/hooks/useAuth";
 import { type LoginFormData, loginSchema } from "@/schemas/auth.schema";
 
 import { Divider } from "./-components/divider";
@@ -34,7 +34,7 @@ function RouteComponent() {
 		resolver: zodResolver(loginSchema),
 	});
 
-	const onSubmit = async (data: LoginFormData) => {
+	async function onSubmit(data: LoginFormData) {
 		try {
 			await loginMutation.mutateAsync(data);
 			// Redireciona para o dashboard após login bem-sucedido
@@ -42,11 +42,11 @@ function RouteComponent() {
 		} catch (error) {
 			console.error("Erro ao fazer login:", error);
 		}
-	};
+	}
 
-	const handleSocialSignIn = (provider: Provider) => {
+	function handleSocialSignIn(provider: Provider) {
 		socialLoginMutation.mutate(provider);
-	};
+	}
 
 	return (
 		<>
@@ -123,11 +123,8 @@ function RouteComponent() {
 				{/* Mensagem de erro da API */}
 				{(loginMutation.isError || socialLoginMutation.isError) && (
 					<div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
-						{loginMutation.error instanceof Error
-							? loginMutation.error.message
-							: socialLoginMutation.error instanceof Error
-								? socialLoginMutation.error.message
-								: "E-mail ou senha incorretos. Tente novamente."}
+						{loginMutation.error &&
+							"E-mail ou senha incorretos. Tente novamente."}
 					</div>
 				)}
 

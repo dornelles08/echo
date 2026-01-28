@@ -1,7 +1,8 @@
+import { EntityNotFoundError } from "@/core/errors/entity-not-found.error";
+import { WrongPasswordError } from "@/domain/user/use-cases/errors/wrong-password.error";
+import { makeAuthenticateUserUseCase } from "@/infra/factories/user/authenticate-user.factory";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
-
-import { makeAuthenticateUserUseCase } from "@/infra/factories/user/authenticate-user.factory";
 
 export async function authenticateUser(request: FastifyRequest, reply: FastifyReply) {
   const authenticateUserBodySchema = z.object({
@@ -19,9 +20,19 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
   });
 
   if (result.isLeft()) {
-    return reply.status(400).send({
-      message: result.value.message,
-    });
+    const error = result.value;
+
+    switch (error.constructor) {
+      case EntityNotFoundError:
+      case WrongPasswordError:
+        return reply.status(401).send({
+          message: "Invalid email or password.",
+        });
+      default:
+        return reply.status(500).send({
+          message: "Internal server error.",
+        });
+    }
   }
 
   const { user } = result.value;

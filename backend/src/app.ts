@@ -1,4 +1,5 @@
 import fastifyCookie from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyJwt from "@fastify/jwt";
 import multipart from "@fastify/multipart";
@@ -30,6 +31,9 @@ app.register(fastifyJwt, {
   },
 });
 
+app.register(fastifyCors, {
+  origin: "http://localhost:3000",
+});
 app.register(fastifyHelmet);
 app.register(fastifyCookie);
 

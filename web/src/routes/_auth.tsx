@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_auth")({
 
 function AuthLayout() {
 	const { theme, toggleTheme } = useTheme();
+
 	return (
 		<div className="min-h-screen bg-stone-100 dark:bg-stone-950 flex items-center justify-center p-4 relative">
 			{/* Botão de tema no canto superior direito */}

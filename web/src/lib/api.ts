@@ -33,7 +33,7 @@ api.interceptors.response.use(
 		if (error.response?.status === 401) {
 			// Token inválido ou expirado
 			localStorage.removeItem("auth_token");
-			window.location.href = "/login";
+			// window.location.href = "/sign-in";
 		}
 
 		return Promise.reject(error);

@@ -18,15 +18,17 @@ export type Provider = "google" | "github" | "facebook";
 export function useLogin() {
 	return useMutation({
 		mutationFn: async (data: LoginFormData): Promise<AuthResponse> => {
-			const response = await api.post("/auth/login", data);
+			const response = await api.post("/authenticate", data);
 			return response.data;
 		},
 		onSuccess: (data) => {
 			// Salva o token no localStorage
+			console.log(data);
+			
 			localStorage.setItem("auth_token", data.token);
 
 			// Salva os dados do usuário
-			localStorage.setItem("user", JSON.stringify(data.user));
+			// localStorage.setItem("user", JSON.stringify(data.user));
 		},
 	});
 }
@@ -35,7 +37,7 @@ export function useLogin() {
 export function useRegister() {
 	return useMutation({
 		mutationFn: async (data: RegisterFormData): Promise<AuthResponse> => {
-			const response = await api.post("/auth/register", data);
+			const response = await api.post("/users", data);
 			return response.data;
 		},
 		onSuccess: (data) => {
@@ -76,7 +78,7 @@ export function useLogout() {
 		onSuccess: () => {
 			// Remove dados de autenticação
 			localStorage.removeItem("auth_token");
-			localStorage.removeItem("user");
+			// localStorage.removeItem("user");
 		},
 	});
 }
