@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Moon, Sun } from "lucide-react";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -6,6 +6,12 @@ import { useTheme } from "@/context/ThemeContext";
 import logo from "../assets/Echo Light 1650x650 - sem fundo.png";
 
 export const Route = createFileRoute("/_auth")({
+	beforeLoad: () => {
+		const token = localStorage.getItem("auth_token");
+		if (token) {
+			throw redirect({ to: "/dashboard" });
+		}
+	},
 	component: AuthLayout,
 });
 
