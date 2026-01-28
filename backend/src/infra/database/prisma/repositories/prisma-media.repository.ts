@@ -33,9 +33,10 @@ export class PrismaMediaRepository implements MediaRepository {
       whereClause.status = filters.status;
     }
 
-    if (filters?.tags && filters.tags.length > 0) {
+    const tags = filters?.tags?.filter((tag) => tag.trim() !== "");
+    if (tags && tags.length > 0) {
       whereClause.tags = {
-        hasSome: filters.tags,
+        hasSome: tags,
       };
     }
 
