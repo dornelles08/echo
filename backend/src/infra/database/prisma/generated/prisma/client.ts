@@ -45,6 +45,11 @@ path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node")
 path.join(process.cwd(), "src/infra/database/prisma/generated/prisma/libquery_engine-darwin-arm64.dylib.node")
 
 /**
+ * Model Segment
+ * 
+ */
+export type Segment = Prisma.SegmentModel
+/**
  * Model User
  * 
  */

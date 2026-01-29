@@ -78,6 +78,7 @@ export const MediaScalarFieldEnum = {
   type: 'type',
   status: 'status',
   prompt: 'prompt',
+  language: 'language',
   transcription: 'transcription',
   tags: 'tags',
   userId: 'userId',

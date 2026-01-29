@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Segment.ts'
 export type * from './models/User.ts'
 export type * from './models/Media.ts'
 export type * from './commonInputTypes.ts'
