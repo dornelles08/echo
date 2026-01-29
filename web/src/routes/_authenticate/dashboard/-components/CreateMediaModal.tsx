@@ -3,6 +3,7 @@ import { CloudUpload, FileAudio, FileVideo, Loader2 } from "lucide-react";
 import { useCallback, useId, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { LanguageSelect } from "@/components/LanguageSelect";
 import { TagInput } from "@/components/TagInput";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,6 +55,7 @@ export function CreateMediaModal({
 	} = useForm<CreateMediaFormData>({
 		resolver: zodResolver(createMediaSchema),
 		defaultValues: {
+			language: "pt-BR",
 			tags: [],
 			prompt: "",
 		},
@@ -121,6 +123,7 @@ export function CreateMediaModal({
 			await uploadMutation.mutateAsync({
 				file: data.file,
 				type: fileType,
+				language: data.language,
 				tags: data.tags,
 				prompt: data.prompt,
 			});
@@ -236,6 +239,19 @@ export function CreateMediaModal({
 							className="bg-stone-100 dark:bg-stone-800"
 						/>
 					</div>
+
+					{/* Idioma */}
+					<Controller
+						name="language"
+						control={control}
+						render={({ field }) => (
+							<LanguageSelect
+								value={field.value || "pt-BR"}
+								onChange={field.onChange}
+								error={errors.language?.message}
+							/>
+						)}
+					/>
 
 					{/* Tags */}
 					<Controller

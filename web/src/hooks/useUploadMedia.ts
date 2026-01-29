@@ -12,6 +12,7 @@ interface CreateMediaPayload {
 	filename: string;
 	url: string;
 	type: MediaType;
+	language?: string;
 	tags: string[];
 	prompt?: string;
 }
@@ -59,11 +60,13 @@ export function useUploadAndCreateMedia() {
 		mutationFn: async ({
 			file,
 			type,
+			language,
 			tags,
 			prompt,
 		}: {
 			file: File;
 			type: MediaType;
+			language?: string;
 			tags: string[];
 			prompt?: string;
 		}) => {
@@ -75,6 +78,7 @@ export function useUploadAndCreateMedia() {
 				filename: uploadResult.filename,
 				url: uploadResult.url,
 				type,
+				language,
 				tags,
 				prompt,
 			});
