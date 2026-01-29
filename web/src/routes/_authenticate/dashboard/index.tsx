@@ -109,8 +109,10 @@ function RouteComponent() {
 							)}
 						</Button>
 					</SheetTrigger>
-					<SheetContent>
-						<MediaFilters onClose={() => setIsFilterOpen(false)} />
+					<SheetContent side="right" showCloseButton={false}>
+						<div className="p-6">
+							<MediaFilters onClose={() => setIsFilterOpen(false)} />
+						</div>
 					</SheetContent>
 				</Sheet>
 

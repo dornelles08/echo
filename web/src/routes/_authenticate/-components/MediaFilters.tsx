@@ -1,6 +1,8 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { X } from "lucide-react";
+import { useForm } from "react-hook-form";
 
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -9,6 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useTags } from "@/hooks/useMedia";
 import type { MediaStatus, MediaType } from "@/types/media";
 
 const mediaTypes: { value: MediaType | "all"; label: string }[] = [
@@ -26,16 +29,11 @@ const statusOptions: { value: MediaStatus | "all"; label: string }[] = [
 	{ value: "error", label: "Erro" },
 ];
 
-const availableTags = [
-	"#marketing",
-	"#estratégia",
-	"#rh",
-	"#ux",
-	"#design",
-	"#suporte",
-	"#vendas",
-	"#produto",
-];
+interface FiltersFormData {
+	type: MediaType | "all";
+	status: MediaStatus | "all";
+	tags: string[];
+}
 
 interface MediaFiltersProps {
 	onClose?: () => void;
@@ -44,41 +42,26 @@ interface MediaFiltersProps {
 export function MediaFilters({ onClose }: MediaFiltersProps) {
 	const navigate = useNavigate();
 	const search = useSearch({ from: "/_authenticate/dashboard/" });
+	const { data: availableTags, isLoading: isLoadingTags } = useTags();
 
 	const currentType = (search.type as MediaType | "all") || "all";
 	const currentStatus = (search.status as MediaStatus | "all") || "all";
 	const currentTags = search.tags ? (search.tags as string).split(",") : [];
 
-	const updateFilters = (updates: Partial<typeof search>) => {
-		const newSearch = { ...search, ...updates };
+	const { handleSubmit, watch, setValue, reset } = useForm<FiltersFormData>({
+		defaultValues: {
+			type: currentType,
+			status: currentStatus,
+			tags: currentTags,
+		},
+	});
 
-		// Remove filtros com valor 'all' ou vazios
-		(Object.keys(newSearch) as Array<keyof typeof newSearch>).forEach((key) => {
-			if (
-				newSearch[key] === "all" ||
-				newSearch[key] === "" ||
-				newSearch[key] === undefined
-			) {
-				delete newSearch[key];
-			}
-		});
-
-		// Reset para página 1 quando mudar filtros
-		navigate({
-			to: "/dashboard",
-			search: { ...newSearch, page: 1 },
-		});
-	};
-
-	const handleTypeChange = (value: string) => {
-		updateFilters({ type: value === "all" ? undefined : value });
-	};
-
-	const handleStatusChange = (value: string) => {
-		updateFilters({ status: value === "all" ? undefined : value });
-	};
+	const watchedType = watch("type");
+	const watchedStatus = watch("status");
+	const watchedTags = watch("tags");
 
 	const handleTagToggle = (tag: string) => {
+		const currentTags = watchedTags || [];
 		let newTags: string[];
 
 		if (currentTags.includes(tag)) {
@@ -89,23 +72,53 @@ export function MediaFilters({ onClose }: MediaFiltersProps) {
 			newTags = [...currentTags, tag];
 		}
 
-		updateFilters({
-			tags: newTags.length > 0 ? newTags.join(",") : undefined,
+		setValue("tags", newTags);
+	};
+
+	const onSubmit = (data: FiltersFormData) => {
+		const searchParams: {
+			page: number;
+			type?: string;
+			status?: string;
+			tags?: string;
+		} = { page: 1 };
+
+		// Adiciona apenas filtros que não são "all" ou vazios
+		if (data.type && data.type !== "all") {
+			searchParams.type = data.type;
+		}
+		if (data.status && data.status !== "all") {
+			searchParams.status = data.status;
+		}
+		if (data.tags && data.tags.length > 0) {
+			searchParams.tags = data.tags.join(",");
+		}
+
+		navigate({
+			to: "/dashboard",
+			search: searchParams,
 		});
+
+		if (onClose) {
+			onClose();
+		}
 	};
 
 	const clearAllFilters = () => {
-		navigate({
-			to: "/dashboard",
-			search: { page: 1 },
+		reset({
+			type: "all",
+			status: "all",
+			tags: [],
 		});
 	};
 
 	const hasActiveFilters =
-		currentType !== "all" || currentStatus !== "all" || currentTags.length > 0;
+		watchedType !== "all" ||
+		watchedStatus !== "all" ||
+		(watchedTags && watchedTags.length > 0);
 
 	return (
-		<div className="space-y-6">
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<h3 className="text-lg font-semibold text-stone-900 dark:text-white">
@@ -127,7 +140,12 @@ export function MediaFilters({ onClose }: MediaFiltersProps) {
 				<Label className="text-stone-900 dark:text-white mb-2 block">
 					Tipo de Mídia
 				</Label>
-				<Select value={currentType} onValueChange={handleTypeChange}>
+				<Select
+					value={watchedType}
+					onValueChange={(value) =>
+						setValue("type", value as MediaType | "all")
+					}
+				>
 					<SelectTrigger className="w-full">
 						<SelectValue />
 					</SelectTrigger>
@@ -146,7 +164,12 @@ export function MediaFilters({ onClose }: MediaFiltersProps) {
 				<Label className="text-stone-900 dark:text-white mb-2 block">
 					Status
 				</Label>
-				<Select value={currentStatus} onValueChange={handleStatusChange}>
+				<Select
+					value={watchedStatus}
+					onValueChange={(value) =>
+						setValue("status", value as MediaStatus | "all")
+					}
+				>
 					<SelectTrigger className="w-full">
 						<SelectValue />
 					</SelectTrigger>
@@ -165,37 +188,62 @@ export function MediaFilters({ onClose }: MediaFiltersProps) {
 				<Label className="text-stone-900 dark:text-white mb-2 block">
 					Tags
 				</Label>
-				<div className="flex flex-wrap gap-2">
-					{availableTags.map((tag) => {
-						const isSelected = currentTags.includes(tag);
-						return (
-							<button
-								key={tag}
-								onClick={() => handleTagToggle(tag)}
-								className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-									isSelected
-										? "bg-teal-600 text-white hover:bg-teal-700"
-										: "bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700"
-								}`}
-								type="button"
-							>
-								{tag}
-							</button>
-						);
-					})}
-				</div>
+				{isLoadingTags ? (
+					<div className="flex flex-wrap gap-2">
+						{[1, 2, 3, 4].map((i) => (
+							<div
+								key={i}
+								className="h-7 w-16 rounded-full bg-stone-200 dark:bg-stone-800 animate-pulse"
+							/>
+						))}
+					</div>
+				) : (
+					<div className="flex flex-wrap gap-2">
+						{availableTags?.map((tag) => {
+							const isSelected = watchedTags?.includes(tag);
+							return (
+								<button
+									key={tag}
+									type="button"
+									onClick={() => handleTagToggle(tag)}
+									className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+										isSelected
+											? "bg-teal-600 text-white hover:bg-teal-700"
+											: "bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700"
+									}`}
+								>
+									{tag}
+								</button>
+							);
+						})}
+						{(!availableTags || availableTags.length === 0) && (
+							<p className="text-sm text-stone-500 dark:text-stone-400">
+								Nenhuma tag encontrada
+							</p>
+						)}
+					</div>
+				)}
 			</div>
 
-			{/* Limpar Filtros */}
-			{hasActiveFilters && (
-				<button
-					onClick={clearAllFilters}
-					className="w-full px-4 py-2 text-sm font-medium text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white border border-stone-300 dark:border-stone-700 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
-					type="button"
+			{/* Action Buttons */}
+			<div className="space-y-3 pt-4 border-t border-stone-200 dark:border-stone-700">
+				{hasActiveFilters && (
+					<button
+						onClick={clearAllFilters}
+						className="w-full px-4 py-2 text-sm font-medium text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white border border-stone-300 dark:border-stone-700 rounded-lg hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+						type="button"
+					>
+						Limpar todos os filtros
+					</button>
+				)}
+
+				<Button
+					type="submit"
+					className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium"
 				>
-					Limpar todos os filtros
-				</button>
-			)}
-		</div>
+					Filtrar
+				</Button>
+			</div>
+		</form>
 	);
 }
