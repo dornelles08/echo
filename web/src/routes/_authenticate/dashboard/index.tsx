@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useMedias } from "@/hooks/useMedia";
 import type { Media } from "@/types/media";
-import { MediaFilters } from "../-components/MediaFilters";
-import { MediaTable } from "../-components/MediaTable";
+import { MediaFilters } from "./-components/MediaFilters";
+import { MediaTable } from "./-components/MediaTable";
 
 export const Route = createFileRoute("/_authenticate/dashboard/")({
 	component: RouteComponent,

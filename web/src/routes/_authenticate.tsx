@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { Sidebar } from "@/components/Sidebar";
-import { Header } from "./_authenticate/-components/Header";
+import { Header } from "./_authenticate/dashboard/-components/Header";
 
 export const Route = createFileRoute("/_authenticate")({
 	beforeLoad: async () => {

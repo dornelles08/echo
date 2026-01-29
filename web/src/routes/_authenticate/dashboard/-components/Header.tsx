@@ -1,10 +1,13 @@
 import { Moon, Plus, Sun } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemeContext";
+import { CreateMediaModal } from "./CreateMediaModal";
 
 export function Header() {
 	const { theme, toggleTheme } = useTheme();
+	const [createMediaModalOpen, setCreateMediaModalOpen] = useState(false);
 
 	return (
 		<header className="h-16 border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-8 flex items-center justify-between">
@@ -44,11 +47,20 @@ export function Header() {
 					<span className="absolute top-1 right-1 w-2 h-2 bg-teal-500 rounded-full"></span>
 				</button> */}
 
-				<Button className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white gap-2">
+				<Button
+					onClick={() => setCreateMediaModalOpen(true)}
+					className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white gap-2"
+				>
 					<Plus className="w-4 h-4" />
 					Nova mídia
 				</Button>
 			</div>
+
+			{/* Modal de Upload */}
+			<CreateMediaModal
+				open={createMediaModalOpen}
+				onOpenChange={setCreateMediaModalOpen}
+			/>
 		</header>
 	);
 }
