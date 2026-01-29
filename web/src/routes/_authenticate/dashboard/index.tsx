@@ -48,7 +48,7 @@ function RouteComponent() {
 	});
 
 	function handleMediaClick(media: Media) {
-		navigate({ to: `/dashboard/media/${media.id}` });
+		navigate({ to: `/${media.id}` });
 	}
 
 	const handlePageChange = (page: number) => {

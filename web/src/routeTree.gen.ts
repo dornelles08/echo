@@ -16,6 +16,7 @@ import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as AuthenticateDashboardIndexRouteImport } from './routes/_authenticate/dashboard/index'
+import { Route as AuthenticateMediaIdIndexRouteImport } from './routes/_authenticate/$mediaId/index'
 
 const AuthenticateRoute = AuthenticateRouteImport.update({
   id: '/_authenticate',
@@ -51,12 +52,19 @@ const AuthenticateDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticateRoute,
   } as any)
+const AuthenticateMediaIdIndexRoute =
+  AuthenticateMediaIdIndexRouteImport.update({
+    id: '/$mediaId/',
+    path: '/$mediaId/',
+    getParentRoute: () => AuthenticateRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/$mediaId/': typeof AuthenticateMediaIdIndexRoute
   '/dashboard/': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRoutesByTo {
@@ -64,6 +72,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/$mediaId': typeof AuthenticateMediaIdIndexRoute
   '/dashboard': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -74,13 +83,26 @@ export interface FileRoutesById {
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_authenticate/$mediaId/': typeof AuthenticateMediaIdIndexRoute
   '/_authenticate/dashboard/': typeof AuthenticateDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot-password' | '/sign-in' | '/sign-up' | '/dashboard/'
+  fullPaths:
+    | '/'
+    | '/forgot-password'
+    | '/sign-in'
+    | '/sign-up'
+    | '/$mediaId/'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/sign-in' | '/sign-up' | '/dashboard'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/sign-in'
+    | '/sign-up'
+    | '/$mediaId'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
@@ -89,6 +111,7 @@ export interface FileRouteTypes {
     | '/_auth/forgot-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
+    | '/_authenticate/$mediaId/'
     | '/_authenticate/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -149,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticateDashboardIndexRouteImport
       parentRoute: typeof AuthenticateRoute
     }
+    '/_authenticate/$mediaId/': {
+      id: '/_authenticate/$mediaId/'
+      path: '/$mediaId'
+      fullPath: '/$mediaId/'
+      preLoaderRoute: typeof AuthenticateMediaIdIndexRouteImport
+      parentRoute: typeof AuthenticateRoute
+    }
   }
 }
 
@@ -167,10 +197,12 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticateRouteChildren {
+  AuthenticateMediaIdIndexRoute: typeof AuthenticateMediaIdIndexRoute
   AuthenticateDashboardIndexRoute: typeof AuthenticateDashboardIndexRoute
 }
 
 const AuthenticateRouteChildren: AuthenticateRouteChildren = {
+  AuthenticateMediaIdIndexRoute: AuthenticateMediaIdIndexRoute,
   AuthenticateDashboardIndexRoute: AuthenticateDashboardIndexRoute,
 }
 
