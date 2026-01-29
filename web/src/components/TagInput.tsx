@@ -1,8 +1,9 @@
 import { X } from "lucide-react";
-import { type KeyboardEvent, useState } from "react";
+import { type KeyboardEvent, useMemo, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTags } from "@/hooks/useMedia";
 
 interface TagInputProps {
 	tags: string[];
@@ -18,16 +19,18 @@ export function TagInput({
 	maxTags = 10,
 }: TagInputProps) {
 	const [inputValue, setInputValue] = useState("");
+	const [showSuggestions, setShowSuggestions] = useState(false);
+	const { data: availableTags = [] } = useTags();
 
 	const addTag = (tag: string) => {
 		const trimmedTag = tag.trim();
 
 		if (!trimmedTag) return;
 
-		// Adiciona # se não tiver
+		// Remove # se tiver
 		const formattedTag = trimmedTag.startsWith("#")
-			? trimmedTag
-			: `#${trimmedTag}`;
+			? trimmedTag.slice(1)
+			: trimmedTag;
 
 		// Verifica se já existe
 		if (tags.includes(formattedTag)) {
@@ -42,7 +45,20 @@ export function TagInput({
 
 		onChange([...tags, formattedTag]);
 		setInputValue("");
+		setShowSuggestions(false);
 	};
+
+	// Filtra sugestões baseadas no input
+	const filteredSuggestions = useMemo(() => {
+		if (!inputValue.trim()) return [];
+
+		const searchTerm = inputValue.toLowerCase().replace("#", "");
+		return availableTags
+			.filter(
+				(tag) => tag.toLowerCase().includes(searchTerm) && !tags.includes(tag),
+			)
+			.slice(0, 5); // Limita a 5 sugestões
+	}, [availableTags, inputValue, tags]);
 
 	const removeTag = (tagToRemove: string) => {
 		onChange(tags.filter((tag) => tag !== tagToRemove));
@@ -58,7 +74,23 @@ export function TagInput({
 		} else if (e.key === "," || e.key === " ") {
 			e.preventDefault();
 			addTag(inputValue);
+		} else if (e.key === "ArrowDown") {
+			e.preventDefault();
+			setShowSuggestions(true);
+		} else if (e.key === "Escape") {
+			e.preventDefault();
+			setShowSuggestions(false);
 		}
+	};
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setInputValue(value);
+		setShowSuggestions(value.trim().length > 0);
+	};
+
+	const selectSuggestion = (tag: string) => {
+		addTag(tag);
 	};
 
 	return (
@@ -80,7 +112,7 @@ export function TagInput({
 							key={tag}
 							className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-600 text-white text-sm rounded-full"
 						>
-							{tag}
+							#{tag}
 							<button
 								type="button"
 								onClick={() => removeTag(tag)}
@@ -94,19 +126,42 @@ export function TagInput({
 			)}
 
 			{/* Input para adicionar novas tags */}
-			<Input
-				type="text"
-				value={inputValue}
-				onChange={(e) => setInputValue(e.target.value)}
-				onKeyDown={handleKeyDown}
-				placeholder="Ex: #ux #entrevista #design"
-				disabled={tags.length >= maxTags}
-				className={error ? "border-red-500" : ""}
-			/>
+			<div className="relative">
+				<Input
+					type="text"
+					value={inputValue}
+					onChange={handleInputChange}
+					onKeyDown={handleKeyDown}
+					onFocus={() => setShowSuggestions(true)}
+					onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+					placeholder="Ex: ux entrevista design"
+					disabled={tags.length >= maxTags}
+					className={error ? "border-red-500" : ""}
+				/>
+
+				{/* Sugestões de autocomplete */}
+				{showSuggestions && filteredSuggestions.length > 0 && (
+					<div className="absolute top-full left-0 right-0 z-10 mt-1 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+						{filteredSuggestions.map((tag) => (
+							<button
+								key={tag}
+								type="button"
+								onClick={() => selectSuggestion(tag)}
+								className="w-full px-3 py-2 text-left text-sm hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors flex items-center justify-between group"
+							>
+								<span className="text-stone-900 dark:text-white">{tag}</span>
+								<span className="text-xs text-stone-500 dark:text-stone-400 opacity-0 group-hover:opacity-100 transition-opacity">
+									Pressione Enter
+								</span>
+							</button>
+						))}
+					</div>
+				)}
+			</div>
 
 			<p className="text-xs text-stone-500 dark:text-stone-400 mt-2">
-				Digite e pressione Enter, espaço ou vírgula para adicionar. Backspace
-				para remover.
+				Digite e pressione Enter, espaço ou vírgula para adicionar. Use as setas
+				para navegar nas sugestões. Backspace para remover.
 			</p>
 
 			{error && <p className="text-red-500 text-xs mt-1">{error}</p>}
