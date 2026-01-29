@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { type KeyboardEvent, useMemo, useState } from "react";
+import { type KeyboardEvent, useCallback, useMemo, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,76 +22,107 @@ export function TagInput({
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const { data: availableTags = [] } = useTags();
 
-	const addTag = (tag: string) => {
-		const trimmedTag = tag.trim();
+	const removeTag = useCallback(
+		(tagToRemove: string) => {
+			onChange(tags.filter((tag) => tag !== tagToRemove));
+		},
+		[onChange, tags],
+	);
 
-		if (!trimmedTag) return;
+	const handleRemoveTagClick = useCallback(
+		(e: React.MouseEvent<HTMLButtonElement>) => {
+			const tagToRemove = e.currentTarget.dataset.tag;
+			if (tagToRemove) {
+				removeTag(tagToRemove);
+			}
+		},
+		[removeTag],
+	);
 
-		// Remove # se tiver
-		const formattedTag = trimmedTag.startsWith("#")
-			? trimmedTag.slice(1)
-			: trimmedTag;
+	const addTag = useCallback(
+		(tag: string) => {
+			const trimmedTag = tag.trim();
 
-		// Verifica se já existe
-		if (tags.includes(formattedTag)) {
+			if (!trimmedTag) return;
+
+			// Remove # se tiver
+			const formattedTag = trimmedTag.startsWith("#")
+				? trimmedTag.slice(1)
+				: trimmedTag;
+
+			// Verifica se já existe
+			if (tags.includes(formattedTag)) {
+				setInputValue("");
+				return;
+			}
+
+			// Verifica limite
+			if (tags.length >= maxTags) {
+				return;
+			}
+
+			onChange([...tags, formattedTag]);
 			setInputValue("");
-			return;
-		}
-
-		// Verifica limite
-		if (tags.length >= maxTags) {
-			return;
-		}
-
-		onChange([...tags, formattedTag]);
-		setInputValue("");
-		setShowSuggestions(false);
-	};
+			setShowSuggestions(false);
+		},
+		[maxTags, onChange, tags],
+	);
 
 	// Filtra sugestões baseadas no input
 	const filteredSuggestions = useMemo(() => {
 		if (!inputValue.trim()) return [];
 
 		const searchTerm = inputValue.toLowerCase().replace("#", "");
+		const selectedTagsSet = new Set(tags);
 		return availableTags
 			.filter(
-				(tag) => tag.toLowerCase().includes(searchTerm) && !tags.includes(tag),
+				(tag) =>
+					tag.toLowerCase().includes(searchTerm) && !selectedTagsSet.has(tag),
 			)
 			.slice(0, 5); // Limita a 5 sugestões
 	}, [availableTags, inputValue, tags]);
 
-	const removeTag = (tagToRemove: string) => {
-		onChange(tags.filter((tag) => tag !== tagToRemove));
-	};
+	const handleKeyDown = useCallback(
+		(e: KeyboardEvent<HTMLInputElement>) => {
+			if (e.key === "Enter") {
+				e.preventDefault();
+				addTag(inputValue);
+			} else if (e.key === "Backspace" && !inputValue && tags.length > 0) {
+				// Remove última tag se backspace com input vazio
+				removeTag(tags[tags.length - 1]);
+			} else if (e.key === "," || e.key === " ") {
+				e.preventDefault();
+				addTag(inputValue);
+			} else if (e.key === "ArrowDown") {
+				e.preventDefault();
+				setShowSuggestions(true);
+			} else if (e.key === "Escape") {
+				e.preventDefault();
+				setShowSuggestions(false);
+			}
+		},
+		[addTag, inputValue, removeTag, tags],
+	);
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			addTag(inputValue);
-		} else if (e.key === "Backspace" && !inputValue && tags.length > 0) {
-			// Remove última tag se backspace com input vazio
-			removeTag(tags[tags.length - 1]);
-		} else if (e.key === "," || e.key === " ") {
-			e.preventDefault();
-			addTag(inputValue);
-		} else if (e.key === "ArrowDown") {
-			e.preventDefault();
-			setShowSuggestions(true);
-		} else if (e.key === "Escape") {
-			e.preventDefault();
-			setShowSuggestions(false);
-		}
-	};
+	const handleInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const value = e.target.value;
+			setInputValue(value);
+			setShowSuggestions(value.trim().length > 0);
+		},
+		[],
+	);
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setInputValue(value);
-		setShowSuggestions(value.trim().length > 0);
-	};
+	const selectSuggestion = useCallback(
+		(tag: string) => {
+			addTag(tag);
+		},
+		[addTag],
+	);
 
-	const selectSuggestion = (tag: string) => {
-		addTag(tag);
-	};
+	const handleBlur = useCallback(() => {
+		setTimeout(() => setShowSuggestions(false), 200);
+	}, []);
 
 	return (
 		<div>
@@ -115,7 +146,8 @@ export function TagInput({
 							#{tag}
 							<button
 								type="button"
-								onClick={() => removeTag(tag)}
+								data-tag={tag}
+								onClick={handleRemoveTagClick}
 								className="hover:bg-teal-700 rounded-full p-0.5 transition-colors"
 							>
 								<X className="w-3 h-3" />
@@ -133,7 +165,7 @@ export function TagInput({
 					onChange={handleInputChange}
 					onKeyDown={handleKeyDown}
 					onFocus={() => setShowSuggestions(true)}
-					onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+					onBlur={handleBlur}
 					placeholder="Ex: ux entrevista design"
 					disabled={tags.length >= maxTags}
 					className={error ? "border-red-500" : ""}
