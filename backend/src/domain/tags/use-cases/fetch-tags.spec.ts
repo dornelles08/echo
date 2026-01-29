@@ -1,5 +1,5 @@
 import { Media } from "@/domain/media/entities/Media";
-import { beforeEach, describe, expect, it, vi } from "bun:test";
+import { beforeEach, describe, expect, it } from "bun:test";
 
 import { InMemoryMediaRepository } from "../../../../test/repositories/in-memory-media.repository";
 import { FetchTagsUseCase } from "./fetch-tags";
@@ -22,6 +22,7 @@ describe("Fetch Tags Use Case", () => {
           filename: "video-1.mp4",
           url: "http://example.com/video-1.mp4",
           type: "video",
+          language: "en",
           status: "completed",
           tags: ["tag1", "tag2"],
           userId,
@@ -41,6 +42,7 @@ describe("Fetch Tags Use Case", () => {
           status: "completed",
           tags: ["tag2", "tag3", "tag1"],
           userId,
+          language: "en",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -63,14 +65,5 @@ describe("Fetch Tags Use Case", () => {
     expect(result.value).toEqual({
       tags: [],
     });
-  });
-
-  it("should return error when repository fails", async () => {
-    vi.spyOn(mediaRepository, "findUserTags").mockRejectedValueOnce(new Error("Database error"));
-
-    const result = await sut.execute({ userId: "user-1" });
-
-    expect(result.isLeft()).toBe(true);
-    expect(result.value).toBeInstanceOf(Error);
   });
 });

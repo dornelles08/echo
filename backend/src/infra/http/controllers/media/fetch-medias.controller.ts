@@ -14,10 +14,13 @@ export async function fetchMedias(request: FastifyRequest, reply: FastifyReply) 
       .pipe(z.array(z.string()))
       .optional(),
     type: z.enum(["video", "audio"]).optional(),
+    language: z.string().optional(),
     status: z.string().optional(),
   });
 
-  const { page, perPage, tags, type, status } = fetchmediasQuerySchema.parse(request.query);
+  const { page, perPage, tags, type, status, language } = fetchmediasQuerySchema.parse(
+    request.query,
+  );
 
   const { sub: userId } = request.user;
 
@@ -27,6 +30,7 @@ export async function fetchMedias(request: FastifyRequest, reply: FastifyReply) 
     perPage,
     page,
     userId,
+    language,
     tags,
     type,
     status,

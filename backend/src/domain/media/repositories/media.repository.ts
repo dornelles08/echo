@@ -5,6 +5,7 @@ export interface MediaFilters {
   type?: string;
   tags?: string[];
   status?: string;
+  language?: string;
 }
 
 export interface MediaRepository {

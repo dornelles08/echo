@@ -27,6 +27,7 @@ model Media {
   type          String
   status        String   @default("pending")
   prompt        String?
+  language      String
   transcription String?
   tags          String[]
   userId        String   @db.ObjectId

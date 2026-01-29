@@ -6,6 +6,7 @@ export interface MediaProps {
   type?: "video" | "audio";
   prompt?: string;
   transcription?: string;
+  language: string;
   status?: string;
   tags?: string[];
   userId: string;
@@ -40,6 +41,10 @@ export class Media extends Entity<MediaProps> {
 
   get tags() {
     return this.props.tags;
+  }
+
+  get language() {
+    return this.props.language;
   }
 
   get userId() {

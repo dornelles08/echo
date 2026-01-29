@@ -6,6 +6,7 @@ export interface MediaPresenterResponse {
   url: string;
   type?: "video" | "audio";
   prompt?: string;
+  language: string;
   transcription?: string;
   status?: string;
   tags: string[];
@@ -32,6 +33,7 @@ export namespace MediaPresenter {
       type: media.type,
       prompt: media.prompt,
       transcription: media.transcription,
+      language: media.language,
       status: media.status,
       tags: media.tags || [],
       createdAt: media.createdAt,

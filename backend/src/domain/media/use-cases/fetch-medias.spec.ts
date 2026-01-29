@@ -1,5 +1,6 @@
-import { makeMediaFactory } from "@test/factories/make-media";
 import { beforeEach, describe, expect, it } from "bun:test";
+
+import { makeMediaFactory } from "@test/factories/make-media";
 import { InMemoryMediaRepository } from "../../../../test/repositories/in-memory-media.repository";
 import { FetchMediasUseCase } from "./fetch-medias";
 
@@ -61,6 +62,33 @@ describe("Fetch Media", () => {
     expect(result.isRight()).toBe(true);
     expect(result.value?.medias.length).toBe(totalMediasVideo);
     expect(result.value?.meta.total).toBe(totalMediasVideo);
+    expect(result.value?.meta.page).toBe(1);
+    expect(result.value?.meta.perPage).toBe(10);
+  });
+
+  it("should be able to fetch a media in portuguese", async () => {
+    Array.from({ length: 9 }).forEach(async () => {
+      const media = makeMediaFactory({
+        userId: "user-123",
+      });
+      await inMemoryMediaRepository.create(media);
+    });
+
+    const totalMediasPortugues = inMemoryMediaRepository.items.filter(
+      (i) => i.language === "pt-BR" && i.type === "video",
+    ).length;
+
+    const result = await sut.execute({
+      userId: "user-123",
+      perPage: 10,
+      page: 1,
+      type: "video",
+      language: "pt-BR",
+    });
+
+    expect(result.isRight()).toBe(true);
+    expect(result.value?.medias.length).toBe(totalMediasPortugues);
+    expect(result.value?.meta.total).toBe(totalMediasPortugues);
     expect(result.value?.meta.page).toBe(1);
     expect(result.value?.meta.perPage).toBe(10);
   });

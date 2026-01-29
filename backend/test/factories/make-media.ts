@@ -9,6 +9,7 @@ export function makeMediaFactory(overrides: Partial<MediaProps> = {}, id?: strin
       url: faker.internet.url(),
       type: faker.helpers.arrayElement(["video", "audio"]),
       prompt: faker.lorem.sentence(),
+      language: faker.helpers.arrayElement(["en-US", "es-ES", "fr-FR", "de-DE", "pt-BR"]),
       transcription: faker.lorem.paragraph(),
       status: faker.helpers.arrayElement(["pending", "processing", "completed", "failed"]),
       tags: faker.helpers.arrayElements(

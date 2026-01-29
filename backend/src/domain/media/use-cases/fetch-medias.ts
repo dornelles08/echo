@@ -6,6 +6,7 @@ interface FetchMediaUseCaseRequest {
   userId: string;
   tags?: string[];
   type?: "video" | "audio";
+  language?: string;
   status?: string;
   page: number;
   perPage: number;
@@ -28,6 +29,7 @@ export class FetchMediasUseCase {
     userId,
     perPage,
     page,
+    language,
     tags,
     type,
     status,
@@ -38,6 +40,7 @@ export class FetchMediasUseCase {
         tags,
         type,
         status,
+        language,
       },
       {
         page,

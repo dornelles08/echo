@@ -43,6 +43,9 @@ export class InMemoryMediaRepository implements MediaRepository {
     if (filters?.status) {
       result = result.filter((media) => media.status === filters.status);
     }
+    if (filters?.language) {
+      result = result.filter((media) => media.language === filters.language);
+    }
 
     const total = result.length;
 
