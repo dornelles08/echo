@@ -1,4 +1,5 @@
 import { Entity } from "@/core/entity";
+import { type Segment } from "./Segment";
 
 export interface MediaProps {
   filename: string;
@@ -7,6 +8,7 @@ export interface MediaProps {
   prompt?: string;
   transcription?: string;
   language: string;
+  segments?: Segment[];
   status?: string;
   tags?: string[];
   userId: string;
@@ -45,6 +47,10 @@ export class Media extends Entity<MediaProps> {
 
   get language() {
     return this.props.language;
+  }
+
+  get segments() {
+    return this.props.segments;
   }
 
   get userId() {

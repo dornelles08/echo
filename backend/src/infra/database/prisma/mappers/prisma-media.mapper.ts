@@ -1,6 +1,6 @@
 import { Media } from "@/domain/media/entities/Media";
-
-import type { Prisma, Media as PrismaMedia } from "../generated/prisma/client";
+import type { Prisma, Media as PrismaMedia, Segment as SegmentModel } from "../generated/prisma/client";
+import { PrismaSegmentMapper } from "./prisma-segment.mapper";
 
 export namespace PrismaMediaMapper {
   export function toDomain(raw: PrismaMedia): Media {
@@ -12,6 +12,10 @@ export namespace PrismaMediaMapper {
         prompt: raw.prompt ? raw.prompt : undefined,
         transcription: raw.transcription ? raw.transcription : undefined,
         status: raw.status,
+        language: raw.language,
+        segments: raw.segments
+          ? (raw.segments as SegmentModel[]).map(PrismaSegmentMapper.toDomain)
+          : [],
         tags: raw.tags,
         userId: raw.userId,
         createdAt: raw.createdAt,
@@ -27,6 +31,8 @@ export namespace PrismaMediaMapper {
       url: media.url,
       type: media.type as "video" | "audio",
       tags: media.tags,
+      language: media.language,
+      segments: media.segments ? media.segments.map(PrismaSegmentMapper.toPrisma) : [],
       status: media.status,
       prompt: media.prompt,
       transcription: media.transcription,
