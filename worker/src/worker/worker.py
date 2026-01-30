@@ -1,5 +1,14 @@
 import time
-from . import config, database, queue, transcription, file_handler
+
+import sys
+import os
+
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+)
+
+from worker import config, database, file_handler, transcription, task_queue as queue
+
 
 def process_task(task_id: str):
     """Processa uma única tarefa de transcrição."""
@@ -22,9 +31,9 @@ def process_task(task_id: str):
             audio_file_path, prompt=doc.get("prompt")
         )
 
-        # Marca como concluído
-        duration = database.mark_as_completed(task_id, start_time, result)
-        print(f"Tarefa {task_id} concluída em {duration:.2f} segundos.")
+        # Marca como transcrito
+        duration = database.mark_as_transcribed(task_id, start_time, result)
+        print(f"Tarefa {task_id} transcrita em {duration:.2f} segundos.")
 
     except Exception as e:
         # Marca como falha e reenfileira
@@ -32,7 +41,7 @@ def process_task(task_id: str):
         database.mark_as_failed(task_id, start_time, e)
         queue.requeue_task(task_id)
         print(f"Tarefa {task_id} falhou e foi reenfileirada.")
-        return # Evita a remoção da fila de processamento abaixo
+        return  # Evita a remoção da fila de processamento abaixo
 
     # Remove da fila de processamento somente em caso de sucesso
     queue.remove_from_processing_queue(task_id)
@@ -47,3 +56,7 @@ def start():
             process_task(task_id)
         else:
             time.sleep(config.SLEEP_TIME)
+
+
+if __name__ == "__main__":
+    start()

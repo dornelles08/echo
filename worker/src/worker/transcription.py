@@ -15,10 +15,23 @@ def get_model():
     return _model
 
 
-def transcribe_audio(file_path: str, prompt: str = "") -> dict:
+def transcribe_audio(
+    file_path: str, prompt: str | None = None, language: str | None = None
+) -> dict:
     """
     Transcreve um arquivo de áudio usando o modelo Whisper.
+
+    Args:
+        file_path: Caminho do arquivo de áudio
+        prompt: Prompt opcional para melhorar a transcrição
+
+    Returns:
+        Dicionário com resultado da transcrição
     """
     model = get_model()
-    result = model.transcribe(file_path, initial_prompt=prompt)
+    # Usa prompt vazio se None for passado
+    effective_prompt = prompt or ""
+    result = model.transcribe(
+        file_path, initial_prompt=effective_prompt, language=language
+    )
     return result

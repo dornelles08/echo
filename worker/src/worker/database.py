@@ -4,15 +4,15 @@ from pymongo import MongoClient
 
 from . import config
 
-_client = None
+CLIENT = None
 
 
 def get_db():
     """Retorna a instância do banco de dados MongoDB."""
-    global _client
-    if _client is None:
-        _client = MongoClient(config.MONGO_URI)
-    return _client.whisper_db
+    global CLIENT
+    if CLIENT is None:
+        CLIENT = MongoClient(config.MONGO_URI)
+    return CLIENT.echo
 
 
 def get_task(task_id: str):
@@ -21,7 +21,7 @@ def get_task(task_id: str):
     return db.transcriptions.find_one({"_id": task_id})
 
 
-def update_task_status(task_id: str, status: str, extra_fields: dict = {}):
+def update_task_status(task_id: str, status: str, extra_fields: dict | None = None):
     """Atualiza o status e outros campos de uma tarefa."""
     db = get_db()
     update_doc = {"$set": {"status": status}}
@@ -37,20 +37,31 @@ def mark_as_processing(task_id: str):
     return start_time
 
 
-def mark_as_completed(task_id: str, start_time: datetime, result: dict):
-    """Marca uma tarefa como 'concluída'."""
+def mark_as_transcribed(task_id: str, start_time: datetime, result: dict):
+    """Marca uma tarefa como 'transcrita'."""
     end_time = datetime.now(timezone.utc)
     duration = (end_time - start_time).total_seconds()
+
+    # Se houver segmentos detalhados, inclui no resultado
+    formatted_segments = []
+    if "segments" in result:
+        formatted_segments = [
+            {
+                "id": str(segment["id"]),
+                "start": segment["start"],
+                "end": segment["end"],
+                "text": segment["text"],
+                "avg_logprob": segment["avg_logprob"],
+                "compression_ratio": segment["compression_ratio"],
+                "no_speech_prob": segment["no_speech_prob"],
+            }
+            for segment in result["segments"]
+        ]
+
     update_task_status(
         task_id,
-        "completed",
-        {
-            "transcription": result["text"],
-            "language": result["language"],
-            "finished_at": end_time,
-            "duration_seconds": duration,
-            "model": config.MODEL_NAME,
-        },
+        "transcribed",
+        {"transcription": result.get("text", ""), "segments": formatted_segments},
     )
     return duration
 
