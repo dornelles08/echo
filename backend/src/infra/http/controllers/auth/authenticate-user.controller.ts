@@ -7,7 +7,7 @@ import { makeAuthenticateUserUseCase } from "@/infra/factories/user/authenticate
 
 export async function authenticateUser(request: FastifyRequest, reply: FastifyReply) {
   const authenticateUserBodySchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(6),
   });
 
