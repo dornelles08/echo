@@ -84,12 +84,23 @@ export function CreateMediaModal({
 				return;
 			}
 
-			const audio = new Audio();
-			audio.onloadedmetadata = () => {
-				const duration = audio.duration;
-				setValue("duration", duration);
-			};
-			audio.src = URL.createObjectURL(file);
+			if (fileType === "audio") {
+				const audio = new Audio();
+				audio.onloadedmetadata = () => {
+					const duration = audio.duration;
+					setValue("duration", duration);
+				};
+				audio.src = URL.createObjectURL(file);
+			}
+			if (fileType === "video") {
+				const video = document.createElement("video");
+				video.preload = 'metadata';
+				video.onloadedmetadata = () => {
+					const duration = video.duration;
+					setValue("duration", duration);
+				};
+				video.src = URL.createObjectURL(file);
+			}
 
 			setSelectedFile(file);
 			setValue("file", file);
