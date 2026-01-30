@@ -23,6 +23,7 @@ import {
 	validateFileType,
 } from "@/config/upload";
 import { useUploadAndCreateMedia } from "@/hooks/useUploadMedia";
+import { formatDuration } from "@/lib/duration";
 import {
 	type CreateMediaFormData,
 	createMediaSchema,
@@ -44,6 +45,7 @@ export function CreateMediaModal({
 	const uploadMutation = useUploadAndCreateMedia();
 	const filenameId = useId();
 	const promptId = useId();
+	const durationId = useId();
 
 	const {
 		register,
@@ -51,15 +53,19 @@ export function CreateMediaModal({
 		handleSubmit,
 		setValue,
 		reset,
+		watch,
 		formState: { errors },
 	} = useForm<CreateMediaFormData>({
 		resolver: zodResolver(createMediaSchema),
 		defaultValues: {
 			language: "pt-BR",
+			duration: undefined,
 			tags: [],
 			prompt: "",
 		},
 	});
+
+	const durationWatch = watch("duration");
 
 	const handleFileSelect = useCallback(
 		(file: File) => {
@@ -77,6 +83,13 @@ export function CreateMediaModal({
 				alert("Tipo de arquivo não suportado!");
 				return;
 			}
+
+			const audio = new Audio();
+			audio.onloadedmetadata = () => {
+				const duration = audio.duration;
+				setValue("duration", duration);
+			};
+			audio.src = URL.createObjectURL(file);
 
 			setSelectedFile(file);
 			setValue("file", file);
@@ -100,7 +113,7 @@ export function CreateMediaModal({
 			e.stopPropagation();
 			setDragActive(false);
 
-			if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+			if (e.dataTransfer.files?.[0]) {
 				handleFileSelect(e.dataTransfer.files[0]);
 			}
 		},
@@ -108,7 +121,7 @@ export function CreateMediaModal({
 	);
 
 	const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
+		if (e.target.files?.[0]) {
 			handleFileSelect(e.target.files[0]);
 		}
 	};
@@ -235,6 +248,23 @@ export function CreateMediaModal({
 						<Input
 							id={filenameId}
 							value={selectedFile?.name || ""}
+							disabled
+							className="bg-stone-100 dark:bg-stone-800"
+						/>
+					</div>
+
+					{/* Duração do arquivo (auto-preenchido) */}
+					<div>
+						<Label
+							htmlFor={durationId}
+							className="text-stone-900 dark:text-white mb-2 block"
+						>
+							Duração do arquivo
+						</Label>
+						<Input
+							id={durationId}
+							{...register("duration")}
+							value={formatDuration(durationWatch)}
 							disabled
 							className="bg-stone-100 dark:bg-stone-800"
 						/>

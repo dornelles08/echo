@@ -44,8 +44,6 @@ export function formatFileSize(bytes: number): string {
 
 // Helper para validar tipo de arquivo
 export function validateFileType(file: File): "video" | "audio" | null {
-	console.log(file);
-
 	const videoFormats = UPLOAD_CONFIG.acceptedMimeTypes.video;
 	const audioFormats = UPLOAD_CONFIG.acceptedMimeTypes.audio;
 

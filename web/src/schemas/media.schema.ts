@@ -9,6 +9,7 @@ export const createMediaSchema = z.object({
 			"Arquivo muito grande (máx. 500MB)",
 		),
 	language: z.string().min(1, "Selecione o idioma da mídia").optional(),
+	duration: z.number().optional(),
 	tags: z
 		.array(z.string())
 		.min(1, "Adicione pelo menos uma tag")
