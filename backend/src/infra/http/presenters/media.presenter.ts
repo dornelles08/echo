@@ -1,4 +1,5 @@
 import type { Media } from "@/domain/media/entities/Media";
+import type { Status } from "@/domain/media/entities/Status";
 
 export interface MediaPresenterResponse {
   id: string;
@@ -8,10 +9,10 @@ export interface MediaPresenterResponse {
   prompt?: string;
   language: string;
   transcription?: string;
-  duration?: number;
+  duration: number;
   summary?: string;
   summaryPrompt?: string;
-  status?: string;
+  status: Status;
   tags: string[];
   createdAt?: Date;
   updatedAt?: Date;

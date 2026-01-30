@@ -1,6 +1,12 @@
 export type Status =
-  | "pending"
-  | "pending_conversion"
-  | "pending_summary"
+  | "peding_transcription"
+  | "processing_transcription"
+  | "failed_transcription"
   | "transcribed"
-  | "summary";
+  | "pending_conversion"
+  | "processing_conversion"
+  | "failed_conversion"
+  | "pending_summary"
+  | "processing_summary"
+  | "failed_summary"
+  | "summarized";

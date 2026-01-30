@@ -5,7 +5,7 @@ import type { Status } from "./Status";
 export interface MediaProps {
   filename: string;
   url: string;
-  type?: "video" | "audio";
+  type: "video" | "audio";
   prompt?: string;
   transcription?: string;
   language: string;
@@ -109,9 +109,9 @@ export class Media extends Entity<MediaProps> {
     const media = new Media(
       {
         ...props,
-        type: props.type ?? "audio",
         tags: props.tags ?? [],
-        status: props.status ?? "pending",
+        status:
+          props.status ?? (props.type === "video" ? "pending_conversion" : "peding_transcription"),
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
       },

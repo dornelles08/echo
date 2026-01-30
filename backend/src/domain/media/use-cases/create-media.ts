@@ -6,7 +6,7 @@ import type { QueueService } from "../services/queue.service";
 interface CreateMediaUseCaseRequest {
   filename: string;
   url: string;
-  type?: "video" | "audio";
+  type: "video" | "audio";
   prompt?: string;
   language: string;
   duration: number;
