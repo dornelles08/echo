@@ -8,6 +8,7 @@ export interface MediaProps {
   prompt?: string;
   transcription?: string;
   language: string;
+  duration: number;
   segments?: Segment[];
   status?: string;
   tags?: string[];
@@ -47,6 +48,10 @@ export class Media extends Entity<MediaProps> {
 
   get language() {
     return this.props.language;
+  }
+
+  get duration() {
+    return this.props.duration;
   }
 
   get segments() {

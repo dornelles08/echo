@@ -13,6 +13,7 @@ export namespace PrismaMediaMapper {
         transcription: raw.transcription ? raw.transcription : undefined,
         status: raw.status,
         language: raw.language,
+        duration: raw.duration,
         segments: raw.segments
           ? (raw.segments as SegmentModel[]).map(PrismaSegmentMapper.toDomain)
           : [],
@@ -32,6 +33,7 @@ export namespace PrismaMediaMapper {
       type: media.type as "video" | "audio",
       tags: media.tags,
       language: media.language,
+      duration: media.duration,
       segments: media.segments ? media.segments.map(PrismaSegmentMapper.toPrisma) : [],
       status: media.status,
       prompt: media.prompt,

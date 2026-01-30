@@ -10,6 +10,7 @@ export function makeMediaFactory(overrides: Partial<MediaProps> = {}, id?: strin
       type: faker.helpers.arrayElement(["video", "audio"]),
       prompt: faker.lorem.sentence(),
       language: faker.helpers.arrayElement(["en-US", "es-ES", "fr-FR", "de-DE", "pt-BR"]),
+      duration: faker.number.float({ min: 0, max: 1000, fractionDigits: 2 }),
       transcription: faker.lorem.paragraph(),
       status: faker.helpers.arrayElement(["pending", "processing", "completed", "failed"]),
       tags: faker.helpers.arrayElements(

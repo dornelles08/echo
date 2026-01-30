@@ -80,6 +80,7 @@ export const MediaScalarFieldEnum = {
   prompt: 'prompt',
   language: 'language',
   transcription: 'transcription',
+  duration: 'duration',
   tags: 'tags',
   userId: 'userId',
   createdAt: 'createdAt',

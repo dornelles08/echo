@@ -29,6 +29,7 @@ model Media {
   prompt        String?
   language      String
   transcription String?
+  duration      Float
   tags          String[]
   segments      Segment[]
   userId        String    @db.ObjectId

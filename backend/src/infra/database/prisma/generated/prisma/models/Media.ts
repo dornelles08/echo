@@ -20,8 +20,18 @@ export type MediaModel = runtime.Types.Result.DefaultSelection<Prisma.$MediaPayl
 
 export type AggregateMedia = {
   _count: MediaCountAggregateOutputType | null
+  _avg: MediaAvgAggregateOutputType | null
+  _sum: MediaSumAggregateOutputType | null
   _min: MediaMinAggregateOutputType | null
   _max: MediaMaxAggregateOutputType | null
+}
+
+export type MediaAvgAggregateOutputType = {
+  duration: number | null
+}
+
+export type MediaSumAggregateOutputType = {
+  duration: number | null
 }
 
 export type MediaMinAggregateOutputType = {
@@ -33,6 +43,7 @@ export type MediaMinAggregateOutputType = {
   prompt: string | null
   language: string | null
   transcription: string | null
+  duration: number | null
   userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,6 +58,7 @@ export type MediaMaxAggregateOutputType = {
   prompt: string | null
   language: string | null
   transcription: string | null
+  duration: number | null
   userId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,6 +73,7 @@ export type MediaCountAggregateOutputType = {
   prompt: number
   language: number
   transcription: number
+  duration: number
   tags: number
   userId: number
   createdAt: number
@@ -68,6 +81,14 @@ export type MediaCountAggregateOutputType = {
   _all: number
 }
 
+
+export type MediaAvgAggregateInputType = {
+  duration?: true
+}
+
+export type MediaSumAggregateInputType = {
+  duration?: true
+}
 
 export type MediaMinAggregateInputType = {
   id?: true
@@ -78,6 +99,7 @@ export type MediaMinAggregateInputType = {
   prompt?: true
   language?: true
   transcription?: true
+  duration?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -92,6 +114,7 @@ export type MediaMaxAggregateInputType = {
   prompt?: true
   language?: true
   transcription?: true
+  duration?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -106,6 +129,7 @@ export type MediaCountAggregateInputType = {
   prompt?: true
   language?: true
   transcription?: true
+  duration?: true
   tags?: true
   userId?: true
   createdAt?: true
@@ -151,6 +175,18 @@ export type MediaAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: MediaAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: MediaSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: MediaMinAggregateInputType
@@ -181,6 +217,8 @@ export type MediaGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: MediaCountAggregateInputType | true
+  _avg?: MediaAvgAggregateInputType
+  _sum?: MediaSumAggregateInputType
   _min?: MediaMinAggregateInputType
   _max?: MediaMaxAggregateInputType
 }
@@ -194,11 +232,14 @@ export type MediaGroupByOutputType = {
   prompt: string | null
   language: string
   transcription: string | null
+  duration: number
   tags: string[]
   userId: string
   createdAt: Date
   updatedAt: Date
   _count: MediaCountAggregateOutputType | null
+  _avg: MediaAvgAggregateOutputType | null
+  _sum: MediaSumAggregateOutputType | null
   _min: MediaMinAggregateOutputType | null
   _max: MediaMaxAggregateOutputType | null
 }
@@ -230,6 +271,7 @@ export type MediaWhereInput = {
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   language?: Prisma.StringFilter<"Media"> | string
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
+  duration?: Prisma.FloatFilter<"Media"> | number
   tags?: Prisma.StringNullableListFilter<"Media">
   segments?: Prisma.SegmentCompositeListFilter | Prisma.SegmentObjectEqualityInput[]
   userId?: Prisma.StringFilter<"Media"> | string
@@ -247,6 +289,7 @@ export type MediaOrderByWithRelationInput = {
   prompt?: Prisma.SortOrder
   language?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   segments?: Prisma.SegmentOrderByCompositeAggregateInput
   userId?: Prisma.SortOrder
@@ -267,6 +310,7 @@ export type MediaWhereUniqueInput = Prisma.AtLeast<{
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   language?: Prisma.StringFilter<"Media"> | string
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
+  duration?: Prisma.FloatFilter<"Media"> | number
   tags?: Prisma.StringNullableListFilter<"Media">
   segments?: Prisma.SegmentCompositeListFilter | Prisma.SegmentObjectEqualityInput[]
   userId?: Prisma.StringFilter<"Media"> | string
@@ -284,13 +328,16 @@ export type MediaOrderByWithAggregationInput = {
   prompt?: Prisma.SortOrder
   language?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MediaCountOrderByAggregateInput
+  _avg?: Prisma.MediaAvgOrderByAggregateInput
   _max?: Prisma.MediaMaxOrderByAggregateInput
   _min?: Prisma.MediaMinOrderByAggregateInput
+  _sum?: Prisma.MediaSumOrderByAggregateInput
 }
 
 export type MediaScalarWhereWithAggregatesInput = {
@@ -305,6 +352,7 @@ export type MediaScalarWhereWithAggregatesInput = {
   prompt?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
   language?: Prisma.StringWithAggregatesFilter<"Media"> | string
   transcription?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  duration?: Prisma.FloatWithAggregatesFilter<"Media"> | number
   tags?: Prisma.StringNullableListFilter<"Media">
   userId?: Prisma.StringWithAggregatesFilter<"Media"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Media"> | Date | string
@@ -320,6 +368,7 @@ export type MediaCreateInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Date | string
@@ -336,6 +385,7 @@ export type MediaUncheckedCreateInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   userId: string
@@ -351,6 +401,7 @@ export type MediaUpdateInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -366,6 +417,7 @@ export type MediaUncheckedUpdateInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -382,6 +434,7 @@ export type MediaCreateManyInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   userId: string
@@ -397,6 +450,7 @@ export type MediaUpdateManyMutationInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -411,6 +465,7 @@ export type MediaUncheckedUpdateManyInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -455,10 +510,15 @@ export type MediaCountOrderByAggregateInput = {
   prompt?: Prisma.SortOrder
   language?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   tags?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type MediaAvgOrderByAggregateInput = {
+  duration?: Prisma.SortOrder
 }
 
 export type MediaMaxOrderByAggregateInput = {
@@ -470,6 +530,7 @@ export type MediaMaxOrderByAggregateInput = {
   prompt?: Prisma.SortOrder
   language?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -484,9 +545,14 @@ export type MediaMinOrderByAggregateInput = {
   prompt?: Prisma.SortOrder
   language?: Prisma.SortOrder
   transcription?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type MediaSumOrderByAggregateInput = {
+  duration?: Prisma.SortOrder
 }
 
 export type MediaCreateNestedManyWithoutUserInput = {
@@ -550,6 +616,14 @@ export type NullableStringFieldUpdateOperationsInput = {
   unset?: boolean
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type MediaUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
@@ -564,6 +638,7 @@ export type MediaCreateWithoutUserInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Date | string
@@ -579,6 +654,7 @@ export type MediaUncheckedCreateWithoutUserInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Date | string
@@ -622,6 +698,7 @@ export type MediaScalarWhereInput = {
   prompt?: Prisma.StringNullableFilter<"Media"> | string | null
   language?: Prisma.StringFilter<"Media"> | string
   transcription?: Prisma.StringNullableFilter<"Media"> | string | null
+  duration?: Prisma.FloatFilter<"Media"> | number
   tags?: Prisma.StringNullableListFilter<"Media">
   userId?: Prisma.StringFilter<"Media"> | string
   createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
@@ -637,6 +714,7 @@ export type MediaCreateManyUserInput = {
   prompt?: string | null
   language: string
   transcription?: string | null
+  duration: number
   tags?: Prisma.MediaCreatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListCreateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Date | string
@@ -651,6 +729,7 @@ export type MediaUpdateWithoutUserInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -665,6 +744,7 @@ export type MediaUncheckedUpdateWithoutUserInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -679,6 +759,7 @@ export type MediaUncheckedUpdateManyWithoutUserInput = {
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   language?: Prisma.StringFieldUpdateOperationsInput | string
   transcription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.FloatFieldUpdateOperationsInput | number
   tags?: Prisma.MediaUpdatetagsInput | string[]
   segments?: Prisma.XOR<Prisma.SegmentListUpdateEnvelopeInput, Prisma.SegmentCreateInput> | Prisma.SegmentCreateInput[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -696,6 +777,7 @@ export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   prompt?: boolean
   language?: boolean
   transcription?: boolean
+  duration?: boolean
   tags?: boolean
   segments?: boolean | Prisma.SegmentDefaultArgs<ExtArgs>
   userId?: boolean
@@ -715,13 +797,14 @@ export type MediaSelectScalar = {
   prompt?: boolean
   language?: boolean
   transcription?: boolean
+  duration?: boolean
   tags?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "url" | "type" | "status" | "prompt" | "language" | "transcription" | "tags" | "segments" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
+export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "url" | "type" | "status" | "prompt" | "language" | "transcription" | "duration" | "tags" | "segments" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
 export type MediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -740,6 +823,7 @@ export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     prompt: string | null
     language: string
     transcription: string | null
+    duration: number
     tags: string[]
     userId: string
     createdAt: Date
@@ -1147,6 +1231,7 @@ export interface MediaFieldRefs {
   readonly prompt: Prisma.FieldRef<"Media", 'String'>
   readonly language: Prisma.FieldRef<"Media", 'String'>
   readonly transcription: Prisma.FieldRef<"Media", 'String'>
+  readonly duration: Prisma.FieldRef<"Media", 'Float'>
   readonly tags: Prisma.FieldRef<"Media", 'String[]'>
   readonly userId: Prisma.FieldRef<"Media", 'String'>
   readonly createdAt: Prisma.FieldRef<"Media", 'DateTime'>

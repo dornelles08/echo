@@ -9,6 +9,7 @@ interface CreateMediaUseCaseRequest {
   type?: "video" | "audio";
   prompt?: string;
   language: string;
+  duration: number;
   tags?: string[];
   userId: string;
 }
@@ -27,6 +28,7 @@ export class CreateMediaUseCase {
     type,
     prompt,
     language,
+    duration,
     tags,
     userId,
   }: CreateMediaUseCaseRequest): Promise<CreateMediaUseCaseResponse> {
@@ -36,6 +38,7 @@ export class CreateMediaUseCase {
       type,
       prompt,
       language,
+      duration,
       tags,
       userId,
     });
