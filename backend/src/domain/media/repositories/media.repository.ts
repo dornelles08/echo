@@ -1,10 +1,11 @@
 import type { PaginationParams } from "@/core/repositories/pagination-params";
 import type { Media } from "../entities/Media";
+import type { Status } from "../entities/Status";
 
 export interface MediaFilters {
   type?: string;
   tags?: string[];
-  status?: string;
+  status?: Status;
   language?: string;
 }
 

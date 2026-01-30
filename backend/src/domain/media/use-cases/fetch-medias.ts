@@ -1,5 +1,6 @@
 import { type Either, right } from "@/core/either";
 import type { Media } from "../entities/Media";
+import type { Status } from "../entities/Status";
 import type { MediaRepository } from "../repositories/media.repository";
 
 interface FetchMediaUseCaseRequest {
@@ -7,20 +8,23 @@ interface FetchMediaUseCaseRequest {
   tags?: string[];
   type?: "video" | "audio";
   language?: string;
-  status?: string;
+  status?: Status;
   page: number;
   perPage: number;
 }
 
-type FetchMediaUseCaseResponse = Either<null, { 
-  medias: Media[];
-  meta: {
-    page: number;
-    perPage: number;
-    total: number;
-    totalPages: number;
-  };
-}>;
+type FetchMediaUseCaseResponse = Either<
+  null,
+  {
+    medias: Media[];
+    meta: {
+      page: number;
+      perPage: number;
+      total: number;
+      totalPages: number;
+    };
+  }
+>;
 
 export class FetchMediasUseCase {
   constructor(private readonly mediaRepository: MediaRepository) {}
@@ -50,7 +54,7 @@ export class FetchMediasUseCase {
 
     const totalPages = Math.ceil(result.total / perPage);
 
-    return right({ 
+    return right({
       medias: result.medias,
       meta: {
         page,

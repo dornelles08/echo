@@ -1,5 +1,6 @@
 import { Entity } from "@/core/entity";
 import type { Segment } from "./Segment";
+import type { Status } from "./Status";
 
 export interface MediaProps {
   filename: string;
@@ -10,7 +11,7 @@ export interface MediaProps {
   language: string;
   duration: number;
   segments?: Segment[];
-  status?: string;
+  status?: Status;
   tags?: string[];
   userId: string;
   createdAt?: Date;

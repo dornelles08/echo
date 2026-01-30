@@ -15,7 +15,15 @@ export async function fetchMedias(request: FastifyRequest, reply: FastifyReply) 
       .optional(),
     type: z.enum(["video", "audio"]).optional(),
     language: z.string().optional(),
-    status: z.string().optional(),
+    status: z
+      .enum([
+        "pending",
+        "pending_conversion",
+        "pending_summary",
+        "transcribed",
+        "summary",
+      ])
+      .optional(),
   });
 
   const { page, perPage, tags, type, status, language } = fetchmediasQuerySchema.parse(
