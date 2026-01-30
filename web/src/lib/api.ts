@@ -25,17 +25,61 @@ api.interceptors.request.use(
 	},
 );
 
-// Interceptor para tratamento de erros
+// Flag para controlar refresh de token
+let isRefreshing = false;
+
+// Interceptor para tratamento de erros com refresh automático
 api.interceptors.response.use(
 	(response) => response,
-	(error) => {
+	async (error) => {
 		console.log("API Error:", error.response?.status, error.response?.data);
+
 		if (error.response?.status === 401) {
-			console.log("401 Error - removing token");
-			localStorage.removeItem("auth_token");
-			window.location.href = "/sign-in";
+			// Token inválido ou expirado
+			console.log("401 Error - attempting token refresh");
+
+			if (!isRefreshing) {
+				isRefreshing = true;
+
+				try {
+					// Tenta fazer refresh do token
+					const refreshResponse = await api.post("/refresh-token");
+					const newToken = refreshResponse.data.token;
+
+					// Atualiza o localStorage
+					localStorage.setItem("auth_token", newToken);
+				} catch (refreshError) {
+					console.error("Failed to refresh token:", refreshError);
+
+					// Se o refresh falhar, remove o token e redireciona
+					localStorage.removeItem("auth_token");
+					window.location.href = "/sign-in";
+				} finally {
+					isRefreshing = false;
+				}
+			} else {
+				// Se já está fazendo refresh, remove o token e redireciona
+				localStorage.removeItem("auth_token");
+				window.location.href = "/sign-in";
+			}
 		}
 
+		return Promise.reject(error);
+	},
+);
+
+// Interceptor para adicionar o token atualizado em requisições repetidas
+api.interceptors.request.use(
+	(config) => {
+		const token = localStorage.getItem("auth_token");
+
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+
+		return config;
+	},
+	(error) => {
 		return Promise.reject(error);
 	},
 );

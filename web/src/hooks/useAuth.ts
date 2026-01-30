@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/lib/api";
 import type { LoginFormData, RegisterFormData } from "@/schemas/auth.schema";
@@ -24,7 +24,7 @@ export function useLogin() {
 		onSuccess: (data) => {
 			// Salva o token no localStorage
 			console.log(data);
-			
+
 			localStorage.setItem("auth_token", data.token);
 
 			// Salva os dados do usuário
@@ -79,6 +79,57 @@ export function useLogout() {
 			// Remove dados de autenticação
 			localStorage.removeItem("auth_token");
 			// localStorage.removeItem("user");
+		},
+	});
+}
+
+// Hook para refresh do token
+export function useRefreshToken() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: async (): Promise<RefreshTokenResponse> => {
+			const response = await api.post("/refresh-token");
+			return response.data;
+		},
+		onSuccess: (data) => {
+			// Atualiza o token no localStorage
+			localStorage.setItem("auth_token", data.token);
+
+			// Invalida queries que usam o token antigo
+			queryClient.invalidateQueries();
+		},
+		onError: (error) => {
+			console.error("Erro ao fazer refresh do token:", error);
+
+			// Se o refresh falhar, remove o token e redireciona para login
+			localStorage.removeItem("auth_token");
+			window.location.href = "/sign-in";
+		},
+	});
+}
+
+interface RefreshTokenResponse {
+	token: string;
+}
+
+// Hook para verificar se o token está próximo de expirar
+export function useTokenExpirationCheck() {
+	return useMutation({
+		mutationFn: async (): Promise<{ expiresSoon: boolean }> => {
+			const token = localStorage.getItem("auth_token");
+			if (!token) {
+				return { expiresSoon: false };
+			}
+
+			try {
+				const response = await api.get("/check-token-expiration");
+				return response.data;
+			} catch (error) {
+				console.error("Erro ao verificar expiração do token:", error);
+				// Em caso de erro, assume que não está próximo de expirar
+				return { expiresSoon: false };
+			}
 		},
 	});
 }
