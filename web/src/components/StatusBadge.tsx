@@ -6,25 +6,49 @@ interface StatusBadgeProps {
 }
 
 const statusConfig = {
-	completed: {
-		label: "Resumo Gerado",
-		className: "bg-green-500/10 text-green-400 border-green-500/20",
+	peding_transcription: {
+		label: "Aguardando transcrição",
+		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
 	},
-	processing: {
-		label: "Processando IA",
-		className: "bg-orange-500/10 text-orange-400 border-orange-500/20",
-	},
-	transcribing: {
+	processing_transcription: {
 		label: "Transcrevendo...",
 		className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
 	},
-	pending: {
-		label: "Aguardando",
+	failed_transcription: {
+		label: "Erro ao transcrever",
+		className: "bg-red-500/10 text-red-400 border-red-500/20",
+	},
+	transcribed: {
+		label: "Transcrição concluída",
+		className: "bg-green-500/10 text-green-400 border-green-500/20",
+	},
+	pending_conversion: {
+		label: "Aguardando conversão",
 		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
 	},
-	error: {
-		label: "Erro",
+	processing_conversion: {
+		label: "Convertendo...",
+		className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+	},
+	failed_conversion: {
+		label: "Erro ao converter",
 		className: "bg-red-500/10 text-red-400 border-red-500/20",
+	},
+	pending_summary: {
+		label: "Aguardando resumo",
+		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
+	},
+	processing_summary: {
+		label: "Resumindo...",
+		className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+	},
+	failed_summary: {
+		label: "Erro ao gerar resumo",
+		className: "bg-red-500/10 text-red-400 border-red-500/20",
+	},
+	summarized: {
+		label: "Resumo gerado",
+		className: "bg-green-500/10 text-green-400 border-green-500/20",
 	},
 };
 
