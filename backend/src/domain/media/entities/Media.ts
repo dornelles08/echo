@@ -1,5 +1,5 @@
 import { Entity } from "@/core/entity";
-import { type Segment } from "./Segment";
+import type { Segment } from "./Segment";
 
 export interface MediaProps {
   filename: string;

@@ -7,12 +7,16 @@ export async function createMedia(request: FastifyRequest, reply: FastifyReply) 
   const createMediaBodySchema = z.object({
     filename: z.string(),
     url: z.string(),
-    type: z.enum(["video", "audio"]).optional(),
+    type: z.enum(["video", "audio"]).default("audio"),
+    language: z.string(),
+    duration: z.number(),
     prompt: z.string().optional(),
     tags: z.array(z.string()).optional(),
   });
 
-  const { filename, url, prompt, tags, type } = createMediaBodySchema.parse(request.body);
+  const { filename, url, prompt, tags, type, language, duration } = createMediaBodySchema.parse(
+    request.body,
+  );
 
   const { sub: userId } = request.user;
 
@@ -22,6 +26,8 @@ export async function createMedia(request: FastifyRequest, reply: FastifyReply) 
     filename,
     url,
     prompt,
+    language,
+    duration,
     tags,
     type,
     userId,
