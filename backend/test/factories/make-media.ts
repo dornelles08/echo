@@ -12,7 +12,9 @@ export function makeMediaFactory(overrides: Partial<MediaProps> = {}, id?: strin
       language: faker.helpers.arrayElement(["en-US", "es-ES", "fr-FR", "de-DE", "pt-BR"]),
       duration: faker.number.float({ min: 0, max: 1000, fractionDigits: 2 }),
       transcription: faker.lorem.paragraph(),
-      status: faker.helpers.arrayElement(["pending", "processing", "completed", "failed"]),
+      summary: faker.lorem.paragraphs(2),
+      summaryPrompt: faker.lorem.sentence(),
+      status: faker.helpers.arrayElement(["pending", "transcribed"] as any),
       tags: faker.helpers.arrayElements(
         ["education", "entertainment", "music", "podcast", "audiobook", "tutorial"],
         { min: 1, max: 3 },

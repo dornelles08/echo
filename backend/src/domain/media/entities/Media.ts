@@ -10,6 +10,8 @@ export interface MediaProps {
   transcription?: string;
   language: string;
   duration: number;
+  summary?: string;
+  summaryPrompt?: string;
   segments?: Segment[];
   status?: Status;
   tags?: string[];
@@ -55,6 +57,14 @@ export class Media extends Entity<MediaProps> {
     return this.props.duration;
   }
 
+  get summary() {
+    return this.props.summary;
+  }
+
+  get summaryPrompt() {
+    return this.props.summaryPrompt;
+  }
+
   get segments() {
     return this.props.segments;
   }
@@ -73,6 +83,21 @@ export class Media extends Entity<MediaProps> {
 
   set transcription(transcription: string | undefined) {
     this.props.transcription = transcription;
+    this.touch();
+  }
+
+  set summary(summary: string | undefined) {
+    this.props.summary = summary;
+    this.touch();
+  }
+
+  set status(status: Status | undefined) {
+    this.props.status = status;
+    this.touch();
+  }
+
+  set summaryPrompt(summaryPrompt: string | undefined) {
+    this.props.summaryPrompt = summaryPrompt;
     this.touch();
   }
 

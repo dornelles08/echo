@@ -9,6 +9,8 @@ export interface MediaPresenterResponse {
   language: string;
   transcription?: string;
   duration?: number;
+  summary?: string;
+  summaryPrompt?: string;
   status?: string;
   tags: string[];
   createdAt?: Date;
@@ -36,6 +38,8 @@ export namespace MediaPresenter {
       transcription: media.transcription,
       language: media.language,
       duration: media.duration,
+      summary: media.summary,
+      summaryPrompt: media.summaryPrompt,
       status: media.status,
       tags: media.tags || [],
       createdAt: media.createdAt,
