@@ -20,6 +20,9 @@ export function MediaTable({ medias, onMediaClick }: MediaTableProps) {
 								Tipo
 							</th>
 							<th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-wider">
+								Duração
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-wider">
 								Status
 							</th>
 							<th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 dark:text-stone-400 uppercase tracking-wider">

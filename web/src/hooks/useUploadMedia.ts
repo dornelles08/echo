@@ -13,6 +13,7 @@ interface CreateMediaPayload {
 	url: string;
 	type: MediaType;
 	language?: string;
+	duration?: number;
 	tags: string[];
 	prompt?: string;
 }
@@ -61,6 +62,7 @@ export function useUploadAndCreateMedia() {
 			file,
 			type,
 			language,
+			duration,
 			tags,
 			prompt,
 		}: {
@@ -68,17 +70,30 @@ export function useUploadAndCreateMedia() {
 			type: MediaType;
 			language?: string;
 			tags: string[];
+			duration?: number;
 			prompt?: string;
 		}) => {
+			
 			// 1. Faz upload do arquivo
 			const uploadResult = await uploadFile.mutateAsync(file);
-
+			
+			console.log({
+				filename: uploadResult.filename,
+				url: uploadResult.url,
+				type,
+				language,
+				duration,
+				tags,
+				prompt,
+			});
+			
 			// 2. Cria a mídia com os dados do upload
 			const mediaResult = await createMedia.mutateAsync({
 				filename: uploadResult.filename,
 				url: uploadResult.url,
 				type,
 				language,
+				duration,
 				tags,
 				prompt,
 			});

@@ -13,6 +13,7 @@ export interface Media {
 	url: string;
 	type: "video" | "audio";
 	language: string;
+	duration: number;
 	prompt?: string;
 	transcription?: string;
 	status: MediaStatus;

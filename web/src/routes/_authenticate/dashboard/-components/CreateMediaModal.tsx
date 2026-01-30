@@ -137,6 +137,7 @@ export function CreateMediaModal({
 				file: data.file,
 				type: fileType,
 				language: data.language,
+				duration: data.duration,
 				tags: data.tags,
 				prompt: data.prompt,
 			});

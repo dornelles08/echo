@@ -1,6 +1,7 @@
 import { FileIcon } from "lucide-react";
 
 import { StatusBadge } from "@/components/StatusBadge";
+import { formatDuration } from "@/lib/duration";
 import type { Media } from "@/types/media";
 import { MediaIcon } from "./MediaIcon";
 
@@ -30,6 +31,13 @@ export function MediaTableRow({ media, onClick }: MediaTableRowProps) {
 			{/* Tipo */}
 			<td className="px-6 py-4 flex">
 				<MediaIcon type={media.type} />
+			</td>
+
+			{/* Duração */}
+			<td className="px-6 py-4">
+				<span className="text-sm font-medium text-stone-900 dark:text-white">
+					{formatDuration(media.duration)}
+				</span>
 			</td>
 
 			{/* Status */}
