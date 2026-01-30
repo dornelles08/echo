@@ -20,11 +20,11 @@ def get_task(task_id: str):
     """Busca uma tarefa no banco de dados pelo seu ID."""
     db = get_db()
     # Primeiro tenta como string (mediaId), depois como ObjectId
-    task = db.transcriptions.find_one({"_id": task_id})
+    task = db.medias.find_one({"_id": task_id})
     if not task:
         # Se não encontrar como string, tenta como ObjectId
         try:
-            task = db.transcriptions.find_one({"_id": ObjectId(task_id)})
+            task = db.medias.find_one({"_id": ObjectId(task_id)})
         except:
             # Se não for ObjectId válido, retorna None
             task = None
@@ -39,16 +39,16 @@ def update_task_status(task_id: str, status: str, extra_fields: dict | None = No
         update_doc["$set"].update(extra_fields)
 
     # Tenta primeiro como string, depois como ObjectId
-    result = db.transcriptions.update_one({"_id": task_id}, update_doc)
+    result = db.medias.update_one({"_id": task_id}, update_doc)
     if result.matched_count == 0:
         # Se não encontrar como string, tenta como ObjectId
-        db.transcriptions.update_one({"_id": ObjectId(task_id)}, update_doc)
+        db.medias.update_one({"_id": ObjectId(task_id)}, update_doc)
 
 
 def mark_as_processing(task_id: str):
     """Marca uma tarefa como 'em processamento'."""
     start_time = datetime.now(timezone.utc)
-    update_task_status(task_id, "processing", {"started_at": start_time})
+    update_task_status(task_id, "processing_transcription", {"started_at": start_time})
     return start_time
 
 
@@ -87,7 +87,7 @@ def mark_as_failed(task_id: str, start_time: datetime, error: Exception):
     duration = (end_time - start_time).total_seconds()
     update_task_status(
         task_id,
-        "failed",
+        "failed_transcription",
         {
             "error": str(error),
             "finished_at": end_time,
