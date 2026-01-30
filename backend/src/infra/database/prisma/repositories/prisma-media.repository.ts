@@ -6,12 +6,17 @@ import type { MediaFilters, MediaRepository } from "@/domain/media/repositories/
 import { prisma } from "..";
 import { PrismaMediaMapper } from "../mappers/prisma-media.mapper";
 export class PrismaMediaRepository implements MediaRepository {
-  async create(media: Media): Promise<void> {
+  async create(media: Media): Promise<Media> {
     const data = PrismaMediaMapper.toPrisma(media);
 
-    await prisma.media.create({
+    const createdMedia = await prisma.media.create({
       data,
     });
+
+    // Update the entity with the real MongoDB ID
+    media.updateId(createdMedia.id);
+
+    return PrismaMediaMapper.toDomain(createdMedia);
   }
 
   async findAll(

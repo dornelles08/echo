@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "@/core/errors/entity-not-found.error";
 import { Media } from "@/domain/media/entities/Media";
-import { CreateMediaSummaryUseCase } from "@/domain/media/use-cases/summary-media";
+import { SummaryMediaUseCase } from "@/domain/media/use-cases/summary-media";
 import { MemoryQueueService } from "@test/services/memory-queue.service";
 import { beforeEach, describe, expect, it } from "bun:test";
 import { InMemoryMediaRepository } from "../../../../test/repositories/in-memory-media.repository";
@@ -9,13 +9,13 @@ import { InvalidStatusError } from "./errors/invalid-status.error";
 
 let mediaRepository: InMemoryMediaRepository;
 let queueService: MemoryQueueService;
-let sut: CreateMediaSummaryUseCase;
+let sut: SummaryMediaUseCase;
 
 describe("Create Media Summary Use Case", () => {
   beforeEach(() => {
     mediaRepository = new InMemoryMediaRepository();
     queueService = new MemoryQueueService();
-    sut = new CreateMediaSummaryUseCase(mediaRepository, queueService);
+    sut = new SummaryMediaUseCase(mediaRepository, queueService);
   });
 
   it("should not create summary if media does not exist", async () => {

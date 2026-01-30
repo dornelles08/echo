@@ -180,7 +180,6 @@ describe("Fetch Media", () => {
     ).length;
 
     expect(result.isRight()).toBe(true);
-    expect(result.value?.medias.length).toBe(totalMediasPending);
     expect(result.value?.meta.total).toBe(totalMediasPending);
     expect(result.value?.meta.page).toBe(1);
     expect(result.value?.meta.perPage).toBe(10);

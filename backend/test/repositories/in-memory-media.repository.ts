@@ -5,12 +5,13 @@ import type { MediaFilters, MediaRepository } from "@/domain/media/repositories/
 export class InMemoryMediaRepository implements MediaRepository {
   items: Media[] = [];
 
-  async create(media: Media): Promise<void> {
+  async create(media: Media): Promise<Media> {
     this.items.push(media);
+    return media;
   }
 
-  async findById(id: string): Promise<Media | null> {
-    return this.items.find((item) => item.id === id) || null;
+  async findById(id: string, userId: string): Promise<Media | null> {
+    return this.items.find((item) => item.id === id && item.userId === userId) || null;
   }
 
   async save(media: Media): Promise<void> {

@@ -10,7 +10,7 @@ export interface MediaFilters {
 }
 
 export interface MediaRepository {
-  create(media: Media): Promise<void>;
+  create(media: Media): Promise<Media>;
   findAll(
     userId: string,
     filters?: MediaFilters,
