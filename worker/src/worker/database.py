@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 from . import config
@@ -18,7 +19,16 @@ def get_db():
 def get_task(task_id: str):
     """Busca uma tarefa no banco de dados pelo seu ID."""
     db = get_db()
-    return db.transcriptions.find_one({"_id": task_id})
+    # Primeiro tenta como string (mediaId), depois como ObjectId
+    task = db.transcriptions.find_one({"_id": task_id})
+    if not task:
+        # Se não encontrar como string, tenta como ObjectId
+        try:
+            task = db.transcriptions.find_one({"_id": ObjectId(task_id)})
+        except:
+            # Se não for ObjectId válido, retorna None
+            task = None
+    return task
 
 
 def update_task_status(task_id: str, status: str, extra_fields: dict | None = None):
@@ -27,7 +37,12 @@ def update_task_status(task_id: str, status: str, extra_fields: dict | None = No
     update_doc = {"$set": {"status": status}}
     if extra_fields:
         update_doc["$set"].update(extra_fields)
-    db.transcriptions.update_one({"_id": task_id}, update_doc)
+
+    # Tenta primeiro como string, depois como ObjectId
+    result = db.transcriptions.update_one({"_id": task_id}, update_doc)
+    if result.matched_count == 0:
+        # Se não encontrar como string, tenta como ObjectId
+        db.transcriptions.update_one({"_id": ObjectId(task_id)}, update_doc)
 
 
 def mark_as_processing(task_id: str):

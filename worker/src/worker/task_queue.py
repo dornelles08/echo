@@ -32,6 +32,48 @@ class BullMQWorker:
         logger.info(f"BullMQ worker iniciado para fila: {queue_name}")
         logger.info(f"Worker token: {self.worker_token}")
 
+    def move_expired_delayed_jobs(self):
+        """
+        Move jobs da fila delayed para wait quando o delay expirar.
+        Essencial para compatibilidade completa com BullMQ.
+        """
+        try:
+            current_time = int(time.time() * 1000)  # milliseconds
+
+            # Busca todos os jobs cujo delay já expirou
+            expired_jobs = self.redis.zrangebyscore(
+                f"{self.queue_name}:delayed", min=0, max=current_time, withscores=False
+            )
+
+            if not expired_jobs:
+                return 0
+
+            # Converte bytes para strings
+            expired_job_ids = [
+                job_id.decode("utf-8") if isinstance(job_id, bytes) else str(job_id)
+                for job_id in expired_jobs
+            ]
+
+            # Move jobs do delayed para wait usando pipeline atômico
+            pipe = self.redis.pipeline()
+            pipe.zrem(f"{self.queue_name}:delayed", *expired_job_ids)
+            for job_id in expired_job_ids:
+                pipe.lpush(f"{self.queue_name}:wait", job_id)
+
+            results = pipe.execute()
+
+            moved_count = len(expired_job_ids)
+            if moved_count > 0:
+                logger.info(
+                    f"Moved {moved_count} expired jobs from delayed to wait queue: {expired_job_ids}"
+                )
+
+            return moved_count
+
+        except Exception as e:
+            logger.error(f"Erro ao mover jobs expirados da fila delayed: {e}")
+            return 0
+
     def get_next_job(self, timeout: int = 30) -> Optional[Dict[str, Any]]:
         """
         Busca o próximo job da fila de espera do BullMQ.
@@ -43,7 +85,10 @@ class BullMQWorker:
             Dicionário com dados do job ou None se não houver jobs
         """
         try:
-            # Tenta obter job da fila wait usando BRPOP (compatível com BullMQ)
+            # 1. PRIMEIRO: Verifica jobs delayed que expiraram
+            self.move_expired_delayed_jobs()
+
+            # 2. DEPOIS: Tenta obter job da fila wait usando BRPOP (compatível com BullMQ)
             result = self.redis.brpop(f"{self.queue_name}:wait", timeout=timeout)
 
             if not result:
