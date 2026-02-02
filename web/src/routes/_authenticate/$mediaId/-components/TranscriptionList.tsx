@@ -2,15 +2,15 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
+import type { Segment } from "@/types/media";
 import {
-  isSignificantPause,
-  type TranscriptionSegment,
+	isSignificantPause
 } from "@/types/transcription";
 import { PauseMarker } from "./PauseMarker";
 import { TranscriptionSegmentItem } from "./TranscriptionSegmentItem";
 
 interface TranscriptionListProps {
-	segments: TranscriptionSegment[];
+	segments: Segment[];
 	onSeek?: (time: number) => void;
 }
 

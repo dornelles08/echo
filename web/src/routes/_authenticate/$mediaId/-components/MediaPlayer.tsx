@@ -1,9 +1,8 @@
+import type { Media } from "@/types/media";
 import { Play, Volume2 } from "lucide-react";
 
-import type { MediaDetails } from "@/types/transcription";
-
 interface MediaPlayerProps {
-	media: MediaDetails;
+	media: Media;
 	onSeek?: (time: number) => void;
 }
 

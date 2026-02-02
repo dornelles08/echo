@@ -24,19 +24,19 @@ export type Segment = {
 };
 
 export interface Media {
+	id: string;
 	filename: string;
 	url: string;
-	type: "video" | "audio";
+	type?: "video" | "audio";
 	prompt?: string;
-	transcription?: string;
 	language: string;
+	transcription?: string;
 	duration: number;
 	summary?: string;
 	summaryPrompt?: string;
-	segments?: Segment[];
 	status: MediaStatus;
 	tags: string[];
-	userId: string;
+	segments: Segment[];
 	createdAt?: Date;
 	updatedAt?: Date;
 }

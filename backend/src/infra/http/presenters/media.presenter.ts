@@ -1,4 +1,5 @@
 import type { Media } from "@/domain/media/entities/Media";
+import type { Segment } from "@/domain/media/entities/Segment";
 import type { Status } from "@/domain/media/entities/Status";
 
 export interface MediaPresenterResponse {
@@ -14,6 +15,7 @@ export interface MediaPresenterResponse {
   summaryPrompt?: string;
   status: Status;
   tags: string[];
+  segments: Segment[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -41,8 +43,9 @@ export namespace MediaPresenter {
       duration: media.duration,
       summary: media.summary,
       summaryPrompt: media.summaryPrompt,
-      status: media.status,
+      status: media.status || "failed_conversion",
       tags: media.tags || [],
+      segments: media.segments || [],
       createdAt: media.createdAt,
       updatedAt: media.updatedAt,
     };

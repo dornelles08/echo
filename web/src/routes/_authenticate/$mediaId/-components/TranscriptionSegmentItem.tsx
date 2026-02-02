@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { Segment } from "@/types/media";
 import {
-  formatTimestamp,
-  getSegmentDuration,
-  getSegmentQuality,
-  type TranscriptionSegment,
+	formatTimestamp,
+	getSegmentDuration,
+	getSegmentQuality
 } from "@/types/transcription";
 import { QualityIndicator } from "./QualityIndicator";
 
 interface TranscriptionSegmentItemProps {
-	segment: TranscriptionSegment;
+	segment: Segment;
 	onSeek?: (time: number) => void;
 }
 
@@ -36,10 +36,10 @@ export function TranscriptionSegmentItem({
 	return (
 		<div
 			className="group py-3 px-4 hover:bg-stone-50 dark:hover:bg-stone-800/50 rounded-lg transition-colors cursor-pointer"
-			onClick={handleClick}
+			// onClick={handleClick}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
-      aria-hidden="true"
+			aria-hidden="true"
 		>
 			<div className="flex items-start gap-3">
 				{/* Indicador de qualidade */}
@@ -55,19 +55,19 @@ export function TranscriptionSegmentItem({
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<button
-										className="text-xs font-mono text-teal-600 dark:text-teal-400 hover:underline"
-										onClick={(e) => {
-											e.stopPropagation();
-											handleClick();
-										}}
+										className="text-xs font-mono text-teal-600 dark:text-teal-400"
+										// onClick={(e) => {
+										// 	e.stopPropagation();
+										// 	handleClick();
+										// }}
 										type="button"
 									>
 										{formatTimestamp(segment.start)}
 									</button>
 								</TooltipTrigger>
-								<TooltipContent>
+								{/* <TooltipContent>
 									<p className="text-xs">Clique para ir para este momento</p>
-								</TooltipContent>
+								</TooltipContent> */}
 							</Tooltip>
 						</TooltipProvider>
 

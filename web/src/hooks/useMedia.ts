@@ -39,8 +39,9 @@ export function useMedias(params: GetMediasParams = {}) {
 export function useMedia(id: string) {
 	return useQuery({
 		queryKey: ["media", id],
-		queryFn: async (): Promise<Media> => {
+		queryFn: async (): Promise<{ media: Media } | null> => {
 			const response = await api.get(`/medias/${id}`);
+
 			return response.data;
 		},
 		enabled: !!id,
