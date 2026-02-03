@@ -33,7 +33,7 @@ app.register(fastifyJwt, {
 });
 
 app.register(fastifyCors, {
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "http://localhost:3001"],
 });
 app.register(fastifyHelmet);
 app.register(fastifyCookie);
