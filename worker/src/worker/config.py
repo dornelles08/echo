@@ -9,6 +9,7 @@ REDIS_URI = os.getenv("REDIS_URI", "redis://localhost:6379/0")
 REDIS_TRANSCRIPTION_QUEUE = os.getenv(
     "REDIS_TRANSCRIPTION_QUEUE", "media_transcription_queue"
 )
+REDIS_CONVERSION_QUEUE = os.getenv("REDIS_CONVERSION_QUEUE", "media_conversion_queue")
 
 MODEL_NAME = os.getenv("MODEL_NAME", "medium")
 SLEEP_TIME = int(os.getenv("SLEEP_TIME", "1"))
