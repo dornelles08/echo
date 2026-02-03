@@ -4,13 +4,13 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import type { StorageService } from "@/domain/file/services/storage.service";
 import { env } from "../env";
 
 export class S3StorageService implements StorageService {
   private readonly client: S3Client;
-  private readonly baseUrl: string;
 
   constructor() {
     this.client = new S3Client({
@@ -22,24 +22,26 @@ export class S3StorageService implements StorageService {
       },
       forcePathStyle: true,
     });
-
-    const protocol = env.MINIO_USE_SSL ? "https" : "http";
-    this.baseUrl = `${protocol}://${env.MINIO_ENDPOINT}:${env.MINIO_PORT}/${env.MINIO_BUCKET}`;
   }
 
   async saveFile(content: Buffer | Uint8Array, filename: string): Promise<string> {
     const uniqueFilename = `${crypto.randomUUID()}-${filename}`;
 
     try {
-      const command = new PutObjectCommand({
+      const putCommand = new PutObjectCommand({
         Bucket: env.MINIO_BUCKET,
         Key: uniqueFilename,
         Body: content,
       });
 
-      await this.client.send(command);
+      await this.client.send(putCommand);
 
-      return `${this.baseUrl}/${uniqueFilename}`;
+      const getCommand = new GetObjectCommand({
+        Bucket: env.MINIO_BUCKET,
+        Key: uniqueFilename,
+      });
+
+      return await getSignedUrl(this.client, getCommand, { expiresIn: 604800 });
     } catch (error) {
       console.error("Error uploading file to MinIO:", error);
       throw new Error("Failed to upload file to storage");
@@ -47,7 +49,7 @@ export class S3StorageService implements StorageService {
   }
 
   async readFile(filePath: string): Promise<Buffer> {
-    const filename = filePath.split("/").pop();
+    const filename = this.extractFilenameFromUrl(filePath);
 
     if (!filename) {
       throw new Error("Invalid file path");
@@ -80,7 +82,7 @@ export class S3StorageService implements StorageService {
   }
 
   async deleteFile(filePath: string): Promise<void> {
-    const filename = filePath.split("/").pop();
+    const filename = this.extractFilenameFromUrl(filePath);
 
     if (!filename) {
       throw new Error("Invalid file path");
@@ -96,6 +98,22 @@ export class S3StorageService implements StorageService {
     } catch (error) {
       console.error("Error deleting file from MinIO:", error);
       throw new Error("Failed to delete file from storage");
+    }
+  }
+
+  private extractFilenameFromUrl(filePath: string): string | null {
+    try {
+      let basePath = filePath;
+      if (filePath.includes("?")) {
+        basePath = filePath.split("?")[0] as string;
+      }
+      const filename = basePath.split("/").pop();
+      if (filename) {
+        return filename;
+      }
+      return null;
+    } catch {
+      return null;
     }
   }
 }
