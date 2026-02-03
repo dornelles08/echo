@@ -16,14 +16,16 @@ def get_model():
 
 
 def transcribe_audio(
-    file_path: str, prompt: str | None = None, language: str | None = None
+    audio_input: str, prompt: str | None = None, language: str | None = None
 ) -> dict:
     """
     Transcreve um arquivo de áudio usando o modelo Whisper.
+    Aceita tanto caminho de arquivo local quanto URL.
 
     Args:
-        file_path: Caminho do arquivo de áudio
+        audio_input: Caminho do arquivo de áudio ou URL
         prompt: Prompt opcional para melhorar a transcrição
+        language: Idioma opcional para forçar transcrição
 
     Returns:
         Dicionário com resultado da transcrição
@@ -32,6 +34,6 @@ def transcribe_audio(
     # Usa prompt vazio se None for passado
     effective_prompt = prompt or ""
     result = model.transcribe(
-        file_path, initial_prompt=effective_prompt, language=language
+        audio_input, initial_prompt=effective_prompt, language=language
     )
     return result

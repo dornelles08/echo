@@ -32,7 +32,6 @@ def process_task(job_id: str):
 
     # Valida dados do payload
     media_id = job_payload.get("mediaId")
-    audio_url = job_payload.get("url")
 
     if not media_id:
         error_msg = "Job sem 'mediaId' no payload"
@@ -40,13 +39,7 @@ def process_task(job_id: str):
         task_queue.fail_task(job_id, ValueError(error_msg))
         return
 
-    if not audio_url:
-        error_msg = "Job sem 'url' no payload"
-        logger.error(error_msg)
-        task_queue.fail_task(job_id, ValueError(error_msg))
-        return
-
-    logger.info("Media ID: %s, URL: %s", media_id, audio_url)
+    logger.info("Media ID: %s", media_id)
 
     # Busca documento no banco de dados usando media_id
     try:
@@ -74,37 +67,15 @@ def process_task(job_id: str):
         return
 
     try:
-        # Encontra o arquivo de áudio a partir da URL
-        # A URL pode ser relativa ou absoluta
-        if audio_url.startswith("http"):
-            # URL HTTP - baixa arquivo
-            audio_file_path = file_handler.download_audio_file(media_id, audio_url)
-        elif audio_url.startswith("../"):
-            # Path relativo - resolve para path absoluto
-            audio_file_path = os.path.normpath(
-                os.path.join(os.path.dirname(__file__), audio_url)
-            )
-        else:
-            # Path absoluto ou relativo ao upload dir
-            if not os.path.isabs(audio_url):
-                audio_file_path = os.path.join(
-                    config.UPLOAD_DIR, os.path.basename(audio_url)
-                )
-            else:
-                audio_file_path = audio_url
+        # Obtém URL do arquivo de áudio do MongoDB
+        audio_url = file_handler.get_audio_url(media_id)
 
-        logger.info("Arquivo de áudio: %s", audio_file_path)
+        logger.info("URL do áudio: %s", audio_url)
 
-        # Verifica se arquivo existe
-        if not os.path.exists(audio_file_path):
-            raise FileNotFoundError(
-                f"Arquivo de áudio não encontrado: {audio_file_path}"
-            )
-
-        # Transcreve o áudio
-        logger.info("Iniciando transcrição do arquivo: %s", audio_file_path)
+        # Transcreve o áudio diretamente da URL
+        logger.info("Iniciando transcrição da URL: %s", audio_url)
         prompt = doc.get("prompt") if doc and doc.get("prompt") else ""
-        result = transcription.transcribe_audio(audio_file_path, prompt=prompt)
+        result = transcription.transcribe_audio(audio_url, prompt=prompt)
 
         # Marca como concluído no banco de dados
         duration = None
@@ -165,7 +136,6 @@ def start():
     while True:
         try:
             job_id = task_queue.get_task_from_queue()
-            logger.info("Job recebido: %s", job_id)
             if job_id:
                 logger.info("Job encontrado: %s", job_id)
                 process_task(job_id)

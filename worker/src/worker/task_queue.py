@@ -219,7 +219,7 @@ class BullMQWorker:
 
             parsed_job = self._parse_job(job_data, job_id)
             attempts_made = parsed_job.get("attemptsMade", 0) + 1
-            max_attempts = parsed_job.get("opts", {}).get("attempts", 3)
+            max_attempts = parsed_job.get("opts", {}).get("attempts", 5)
 
             # Remove da fila active
             self.redis.lrem(f"{self.queue_name}:active", 1, job_id)
@@ -294,7 +294,9 @@ def get_bullmq_worker() -> BullMQWorker:
     global _worker
     if _worker is None:
         # Extrai nome da fila do config (remove prefixos se houver)
-        queue_name = config.REDIS_QUEUE.replace("bull:", "").replace(":", "-")
+        queue_name = config.REDIS_TRANSCRIPTION_QUEUE.replace("bull:", "").replace(
+            ":", "-"
+        )
         _worker = BullMQWorker(queue_name)
     return _worker
 
