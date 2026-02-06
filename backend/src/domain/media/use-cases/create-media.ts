@@ -46,19 +46,10 @@ export class CreateMediaUseCase {
     // The repository now returns the media with the real MongoDB ID
     const createdMedia = await this.mediaRepository.create(media);
 
-    if (type === "video") {
-      await this.queueService.publish("media_conversion_queue", {
-        mediaId: createdMedia.id,
-        url: createdMedia.url,
-      });
-    }
-
-    if (type === "audio") {
-      await this.queueService.publish("media_transcription_queue", {
-        mediaId: createdMedia.id,
-        url: createdMedia.url,
-      });
-    }
+    await this.queueService.publish("media_transcription_queue", {
+      mediaId: createdMedia.id,
+      url: createdMedia.url,
+    });
 
     return right({ media: createdMedia });
   }

@@ -37,7 +37,7 @@ describe("Create Media", () => {
         userId: "user-123",
       }),
     });
-    expect(memoryQueueService.queues["media_conversion_queue"]).toHaveLength(1);
+    expect(memoryQueueService.queues["media_transcription_queue"]).toHaveLength(1);
   });
 
   it("should be able to create a media type audio", async () => {
