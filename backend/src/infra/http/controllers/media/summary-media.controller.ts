@@ -4,7 +4,7 @@ import { z } from "zod";
 import { EntityNotFoundError } from "@/core/errors/entity-not-found.error";
 import { AlreadyProcessedError } from "@/domain/media/use-cases/errors/already-processed.error";
 import { InvalidStatusError } from "@/domain/media/use-cases/errors/invalid-status.error";
-import { makeSummaryMediaUseCasee } from "@/infra/factories/make-create-media-summary";
+import { makeSummaryMediaUseCasee } from "@/infra/factories/media/summary-media.factory";
 
 export async function summaryMedia(request: FastifyRequest, reply: FastifyReply) {
   const summaryMediaParamsSchema = z.object({

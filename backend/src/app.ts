@@ -42,6 +42,6 @@ app.get("/hello", () => "Hello World");
 
 app.register(fileRoutes, { prefix: "/files" });
 app.register(mediaRoutes, { prefix: "/medias" });
-app.register(userRoutes, { prefix: "/users" });
+app.register(userRoutes);
 app.register(authRoutes);
 app.register(tagRoutes, { prefix: "/tags" });

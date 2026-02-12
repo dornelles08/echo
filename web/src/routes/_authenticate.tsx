@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { Sidebar } from "@/components/Sidebar";
+import { api } from "@/lib/api";
 import { Header } from "./_authenticate/dashboard/-components/Header";
 
 export const Route = createFileRoute("/_authenticate")({
@@ -13,27 +14,16 @@ export const Route = createFileRoute("/_authenticate")({
 
 		// Verifica se o token é válido fazendo uma requisição para um endpoint protegido
 		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL || "http://localhost:3333"}/me`,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				},
-			);
-
-			if (!response.ok) {
-				if (response.status === 401) {
-					// Token inválido, remove e redireciona para login
-					localStorage.removeItem("auth_token");
-					throw redirect({ to: "/sign-in" });
-				}
-				// Outros erros, permite o acesso mas pode mostrar aviso
-			}
-		} catch (error) {
-			// Erro de rede ou falha na verificação, remove o token e redireciona
-			localStorage.removeItem("auth_token");
-			throw redirect({ to: "/sign-in" });
+			await api.get("/me");
+		} catch (error: any) {
+			// Se o erro não for 401, remove o token e redireciona
+			// Erros 401 são tratados automaticamente pelo interceptor da API
+			// if (error.response?.status !== 401) {
+			// 	localStorage.removeItem("auth_token");
+			// 	throw redirect({ to: "/sign-in" });
+			// }
+			// Se for 401, o interceptor já tentará fazer o refresh
+			// Se o refresh falhar, ele redirecionará para o login
 		}
 	},
 	component: AuthneticateLayout,

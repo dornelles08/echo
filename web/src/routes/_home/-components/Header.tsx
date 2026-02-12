@@ -20,12 +20,12 @@ export function Header() {
 						>
 							Como funciona
 						</a>
-						<a
+						{/* <a
 							href="#recursos"
 							className="text-sm text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
 						>
 							Recursos
-						</a>
+						</a> */}
 						<a
 							href="#precos"
 							className="text-sm text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
