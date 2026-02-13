@@ -20,21 +20,24 @@ services:
       - redis_data:/data
 
   api:
-    build: ./backend
-    command: uv run main.py
+    build: ./apps/api
+    command: pnpm dev
     ports:
       - "8000:8000"
     volumes:
       - ./uploads:/app/uploads
+      - ./apps/api/src:/app/src
+      - ./packages/core/src:/app/packages/core/src
     environment:
       - MONGO_URI=mongodb://mongodb:27017
       - REDIS_URI=redis://redis:6379/0
+      - NODE_ENV=development
     depends_on:
       - mongodb
       - redis
 
   worker:
-    build: ./worker
+    build: ./apps/worker
     command: uv run main.py
     volumes:
       - ./uploads:/app/uploads

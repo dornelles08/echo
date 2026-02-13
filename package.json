@@ -1,0 +1,32 @@
+{
+  "name": "echo-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Echo project monorepo with API, Web and Worker",
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"api|web\" dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm --filter \"api|web\" build",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "test": "pnpm --filter \"api|web\" test",
+    "test:api": "pnpm --filter api test",
+    "test:web": "pnpm --filter web test",
+    "lint": "pnpm --filter \"api|web\" lint",
+    "lint:fix": "pnpm --filter \"api|web\" lint:fix",
+    "typecheck": "pnpm --filter \"api|web\" typecheck",
+    "worker:dev": "cd apps/worker && uv run main.py",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@10.26.2"
+}
