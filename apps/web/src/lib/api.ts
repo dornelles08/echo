@@ -28,6 +28,9 @@ api.interceptors.request.use(
 // Flag para controlar refresh de token
 let isRefreshing = false;
 
+// Rotas que não devem trigger redirect em 401 (são erros de credenciais, não token expirado)
+const authRoutes = ["/authenticate"];
+
 // Interceptor para tratamento de erros com refresh automático
 api.interceptors.response.use(
 	(response) => response,
@@ -35,6 +38,12 @@ api.interceptors.response.use(
 		console.log("API Error:", error.response?.status, error.response?.data);
 
 		if (error.response?.status === 401) {
+			const isAuthRoute = authRoutes.some((route) => error.config.url.includes(route));
+
+			if (isAuthRoute) {
+				return Promise.reject(error);
+			}
+
 			// Token inválido ou expirado
 			console.log("401 Error - attempting token refresh");
 
