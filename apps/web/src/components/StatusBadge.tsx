@@ -5,8 +5,8 @@ interface StatusBadgeProps {
 	status: MediaStatus;
 }
 
-const statusConfig = {
-	peding_transcription: {
+const statusConfig: Record<MediaStatus, { label: string; className: string }> = {
+	pending_transcription: {
 		label: "Aguardando transcrição",
 		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
 	},
@@ -21,18 +21,6 @@ const statusConfig = {
 	transcribed: {
 		label: "Transcrição concluída",
 		className: "bg-green-500/10 text-green-400 border-green-500/20",
-	},
-	pending_conversion: {
-		label: "Aguardando conversão",
-		className: "bg-stone-500/10 text-stone-400 border-stone-500/20",
-	},
-	processing_conversion: {
-		label: "Convertendo...",
-		className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-	},
-	failed_conversion: {
-		label: "Erro ao converter",
-		className: "bg-red-500/10 text-red-400 border-red-500/20",
 	},
 	pending_summary: {
 		label: "Aguardando resumo",

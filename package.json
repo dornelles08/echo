@@ -13,6 +13,7 @@
     "test": "pnpm --filter \"api|web\" test",
     "test:api": "pnpm --filter api test",
     "test:web": "pnpm --filter web test",
+    "test:core": "pnpm --filter core test",
     "lint": "pnpm --filter \"api|web\" lint",
     "lint:fix": "pnpm --filter \"api|web\" lint:fix",
     "typecheck": "pnpm --filter \"api|web\" typecheck",

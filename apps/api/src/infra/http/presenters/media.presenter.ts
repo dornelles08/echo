@@ -1,6 +1,7 @@
-import type { Media } from "@echo/core";
-import type { Segment } from "@echo/core";
-import type { Status } from "@echo/core";
+import type { Status } from "@echo/contracts";
+import type { Media, Segment } from "@echo/core";
+
+export type { Status };
 
 export interface MediaPresenterResponse {
   id: string;
@@ -43,7 +44,7 @@ export namespace MediaPresenter {
       duration: media.duration,
       summary: media.summary,
       summaryPrompt: media.summaryPrompt,
-      status: media.status || "failed_conversion",
+      status: media.status || "pending_transcription",
       tags: media.tags || [],
       segments: media.segments || [],
       createdAt: media.createdAt,

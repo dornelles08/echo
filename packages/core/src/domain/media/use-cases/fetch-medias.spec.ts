@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { makeMediaFactory, InMemoryMediaRepository } from "../../../test";
+import { InMemoryMediaRepository, makeMediaFactory } from "../../../test";
 import { FetchMediasUseCase } from "./fetch-medias";
 
 let inMemoryMediaRepository: InMemoryMediaRepository;
@@ -176,10 +176,10 @@ describe("Fetch Media", () => {
       userId: "user-123",
       perPage: 10,
       page: 1,
-      status: "pending",
+      status: "pending_transcription",
     });
     const totalMediasPending = inMemoryMediaRepository.items.filter(
-      (i) => i.status === "pending",
+      (i) => i.status === "pending_transcription",
     ).length;
 
     expect(result.isRight()).toBe(true);

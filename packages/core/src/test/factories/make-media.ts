@@ -23,7 +23,7 @@ export function makeMediaFactory(
       transcription: faker.lorem.paragraph(),
       summary: faker.lorem.paragraphs(2),
       summaryPrompt: faker.lorem.sentence(),
-      status: faker.helpers.arrayElement(["pending", "transcribed"] as any),
+      status: faker.helpers.arrayElement(["pending_transcription", "transcribed"] as any),
       tags: faker.helpers.arrayElements(
         [
           "education",

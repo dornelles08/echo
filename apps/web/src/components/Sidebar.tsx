@@ -41,7 +41,7 @@ export function Sidebar() {
 		<aside className="w-60 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 flex flex-col">
 			{/* Logo */}
 			<div className="p-6 border-b border-stone-200 dark:border-stone-800">
-				<Link to="/dashboard" className="flex items-center gap-3">
+				<Link to="/dashboard" search={{ page: 1 }} className="flex items-center gap-3">
 					<Logo />
 				</Link>
 			</div>

@@ -110,11 +110,7 @@ export class Media extends Entity<MediaProps> {
       {
         ...props,
         tags: props.tags ?? [],
-        status:
-          props.status ??
-          (props.type === "video"
-            ? "pending_conversion"
-            : "peding_transcription"),
+        status: props.status ?? "pending_transcription",
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
       },

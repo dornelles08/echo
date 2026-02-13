@@ -3,17 +3,9 @@ import { AlreadyProcessedError } from "@echo/core";
 import { InvalidStatusError } from "@echo/core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeSummaryMediaUseCase } from "infra/factories/media/summary-media.factory";
-import { z } from "zod";
+import { summaryMediaParamsSchema, summaryMediaBodySchema } from "@echo/contracts";
 
 export async function summaryMedia(request: FastifyRequest, reply: FastifyReply) {
-  const summaryMediaParamsSchema = z.object({
-    mediaId: z.string(),
-  });
-
-  const summaryMediaBodySchema = z.object({
-    prompt: z.string().min(1, "Prompt is required").max(500, "Prompt too long"),
-  });
-
   const { mediaId } = summaryMediaParamsSchema.parse(request.params);
   const { prompt } = summaryMediaBodySchema.parse(request.body);
   const { sub: userId } = request.user;

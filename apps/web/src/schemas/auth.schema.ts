@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Schema de Login
 export const loginSchema = z.object({
 	email: z.string().min(1, "E-mail é obrigatório").email("E-mail inválido"),
 	password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
@@ -8,7 +7,6 @@ export const loginSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
-// Schema de Cadastro
 export const registerSchema = z.object({
 	name: z
 		.string()

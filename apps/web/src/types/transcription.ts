@@ -14,7 +14,7 @@ export interface MediaDetails {
 	filename: string;
 	url: string;
 	type: "video" | "audio";
-	status: "pending" | "transcribing" | "processing" | "completed" | "error";
+	status: "pending_transcription" | "transcribing" | "processing" | "completed" | "error";
 	duration: string;
 	tags: string[];
 	prompt?: string;

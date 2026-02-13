@@ -1,15 +1,10 @@
 import { EntityNotFoundError, WrongPasswordError } from "@echo/core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeAuthenticateUserUseCase } from "infra/factories/user/authenticate-user.factory";
-import z from "zod";
+import { loginSchema } from "@echo/contracts";
 
 export async function authenticateUser(request: FastifyRequest, reply: FastifyReply) {
-  const authenticateUserBodySchema = z.object({
-    email: z.email(),
-    password: z.string().min(6),
-  });
-
-  const { email, password } = authenticateUserBodySchema.parse(request.body);
+  const { email, password } = loginSchema.parse(request.body);
 
   const authenticateUserUseCase = makeAuthenticateUserUseCase();
 

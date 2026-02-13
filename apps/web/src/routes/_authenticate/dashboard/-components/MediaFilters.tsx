@@ -22,11 +22,12 @@ const mediaTypes: { value: MediaType | "all"; label: string }[] = [
 
 const statusOptions: { value: MediaStatus | "all"; label: string }[] = [
 	{ value: "all", label: "Todos os status" },
-	{ value: "completed", label: "Resumo Gerado" },
-	{ value: "processing", label: "Processando IA" },
-	{ value: "transcribing", label: "Transcrevendo" },
-	{ value: "pending", label: "Aguardando" },
-	{ value: "error", label: "Erro" },
+	{ value: "summarized", label: "Resumo Gerado" },
+	{ value: "processing_summary", label: "Processando Resumo" },
+	{ value: "processing_transcription", label: "Transcrevendo" },
+	{ value: "pending_transcription", label: "Aguardando Transcrição" },
+	{ value: "failed_transcription", label: "Erro na Transcrição" },
+	{ value: "failed_summary", label: "Erro no Resumo" },
 ];
 
 interface FiltersFormData {
