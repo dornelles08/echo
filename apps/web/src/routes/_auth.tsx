@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_auth")({
 	beforeLoad: () => {
 		const token = localStorage.getItem("auth_token");
 		if (token) {
-			throw redirect({ to: "/dashboard" });
+			throw redirect({ to: "/dashboard", search: { page: 1 } });
 		}
 	},
 	component: AuthLayout,

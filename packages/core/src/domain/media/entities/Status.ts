@@ -1,6 +1,5 @@
 export type Status =
-  | "pending"
-  | "peding_transcription"
+  | "pending_transcription"
   | "processing_transcription"
   | "failed_transcription"
   | "transcribed"

@@ -38,7 +38,7 @@ function RouteComponent() {
 		try {
 			await loginMutation.mutateAsync(data);
 			// Redireciona para o dashboard após login bem-sucedido
-			navigate({ to: "/dashboard" });
+			navigate({ to: "/dashboard", search: { page: 1 } });
 		} catch (error) {
 			console.error("Erro ao fazer login:", error);
 		}

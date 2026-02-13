@@ -1,14 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeGetMediaUseCase } from "infra/factories/media/get-media.factory";
 import { MediaPresenter } from "infra/http/presenters/media.presenter";
-import z from "zod";
+import { getMediaParamsSchema } from "@echo/contracts";
 
 
 export async function getMedia(request: FastifyRequest, reply: FastifyReply) {
-  const getMediaParamsSchema = z.object({
-    mediaId: z.string(),
-  });
-
   const { mediaId } = getMediaParamsSchema.parse(request.params);
 
   const { sub: userId } = request.user;

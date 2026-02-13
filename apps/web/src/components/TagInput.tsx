@@ -88,8 +88,8 @@ export function TagInput({
 				e.preventDefault();
 				addTag(inputValue);
 			} else if (e.key === "Backspace" && !inputValue && tags.length > 0) {
-				// Remove última tag se backspace com input vazio
-				removeTag(tags[tags.length - 1]);
+				const lastTag = tags.at(-1);
+				if (lastTag) removeTag(lastTag);
 			} else if (e.key === "," || e.key === " ") {
 				e.preventDefault();
 				addTag(inputValue);

@@ -21,17 +21,11 @@ interface TranscriptionSegmentItemProps {
 
 export function TranscriptionSegmentItem({
 	segment,
-	onSeek,
+	onSeek: _onSeek,
 }: TranscriptionSegmentItemProps) {
 	const [isHovered, setIsHovered] = useState(false);
 	const quality = getSegmentQuality(segment.avg_logprob);
 	const duration = getSegmentDuration(segment.start, segment.end);
-
-	const handleClick = () => {
-		if (onSeek) {
-			onSeek(segment.start);
-		}
-	};
 
 	return (
 		<div

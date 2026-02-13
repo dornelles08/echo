@@ -96,13 +96,18 @@ export function parseDuration(duration: string): number {
 	// Formato "1:23:45" ou "23:45"
 	const parts = duration.split(":").map(Number);
 	if (parts.length === 3) {
-		return parts[0] * 3600 + parts[1] * 60 + parts[2];
+		const h = parts[0] ?? 0;
+		const m = parts[1] ?? 0;
+		const s = parts[2] ?? 0;
+		return h * 3600 + m * 60 + s;
 	}
 	if (parts.length === 2) {
-		return parts[0] * 60 + parts[1];
+		const m = parts[0] ?? 0;
+		const s = parts[1] ?? 0;
+		return m * 60 + s;
 	}
 	if (parts.length === 1) {
-		return parts[0];
+		return parts[0] ?? 0;
 	}
 
 	return 0;
@@ -138,7 +143,9 @@ export function formatDurationHuman(seconds: number): string {
 		parts.push(`${secs} ${secs === 1 ? "segundo" : "segundos"}`);
 	}
 
-	if (parts.length === 1) return parts[0];
+	if (parts.length === 1) return parts[0] ?? "";
 	if (parts.length === 2) return parts.join(" e ");
-	return parts.slice(0, -1).join(", ") + " e " + parts[parts.length - 1];
+	const lastPart = parts.at(-1);
+	const firstParts = parts.slice(0, -1);
+	return (firstParts.length > 0 ? firstParts.join(", ") + " e " : "") + (lastPart ?? "");
 }

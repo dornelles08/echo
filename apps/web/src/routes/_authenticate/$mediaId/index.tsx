@@ -1,6 +1,5 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { Clock, Globe, Tag } from "lucide-react";
-import { useState } from "react";
 
 import { StatusBadge } from "@/components/StatusBadge";
 import { COMMON_LANGUAGES } from "@/config/constantes";
@@ -15,7 +14,6 @@ export const Route = createFileRoute("/_authenticate/$mediaId/")({
 
 export default function MediaDetailsPage() {
 	const { mediaId } = useParams({ from: "/_authenticate/$mediaId/" });
-	const [currentTime, setCurrentTime] = useState(0);
 	const { data, isError, isLoading } = useMedia(mediaId);
 
 	if (isLoading) {
@@ -36,15 +34,8 @@ export default function MediaDetailsPage() {
 		({ code }) => code === media.language,
 	);
 
-	const handleSeek = (time: number) => {
-		setCurrentTime(time);
-		// TODO: Implementar seek no player quando disponível
-		console.log("Seek to:", time);
-	};
-
 	const handleGenerateSummary = (template: string, instructions?: string) => {
 		console.log("Generate summary:", { template, instructions });
-		// TODO: Implementar geração de resumo
 	};
 
 	return (
@@ -90,17 +81,9 @@ export default function MediaDetailsPage() {
 			<div className="flex-1 overflow-hidden grid grid-cols-2 divide-x divide-stone-200 dark:divide-stone-800">
 				{/* Coluna esquerda: Player + Transcrição */}
 				<div className="flex flex-col overflow-hidden">
-					{/* Player */}
-					{/* <div className="p-6 border-b border-stone-200 dark:border-stone-800">
-						<MediaPlayer media={media} onSeek={handleSeek} />
-					</div> */}
-
 					{/* Transcrição */}
 					<div className="flex-1 overflow-hidden">
-						<TranscriptionList
-							segments={media.segments || []}
-							onSeek={handleSeek}
-						/>
+						<TranscriptionList segments={media.segments || []} />
 					</div>
 				</div>
 

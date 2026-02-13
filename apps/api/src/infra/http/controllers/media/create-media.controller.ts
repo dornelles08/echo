@@ -1,20 +1,10 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeCreateMediaUseCase } from "infra/factories/media/create-media.factory";
-import z from "zod";
+import { createMediaSchema } from "@echo/contracts";
 
 
 export async function createMedia(request: FastifyRequest, reply: FastifyReply) {
-  const createMediaBodySchema = z.object({
-    filename: z.string(),
-    url: z.string(),
-    type: z.enum(["video", "audio"]).default("audio"),
-    language: z.string(),
-    duration: z.number(),
-    prompt: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-  });
-
-  const { filename, url, prompt, tags, type, language, duration } = createMediaBodySchema.parse(
+  const { filename, url, prompt, tags, type, language, duration } = createMediaSchema.parse(
     request.body,
   );
 

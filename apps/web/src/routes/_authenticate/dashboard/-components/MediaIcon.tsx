@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { MediaType } from "@/types/media";
 
 interface MediaIconProps {
-	type: MediaType;
+	type?: MediaType;
 	className?: string;
 }
 
