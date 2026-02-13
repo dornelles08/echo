@@ -78,6 +78,7 @@ export function useLogout() {
 		onSuccess: () => {
 			// Remove dados de autenticação
 			localStorage.removeItem("auth_token");
+			window.location.href = "/sign-in";
 			// localStorage.removeItem("user");
 		},
 	});

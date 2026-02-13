@@ -7,8 +7,4 @@ export type Status =
   | "pending_summary"
   | "processing_summary"
   | "failed_summary"
-  | "summarized"
-  | "pending_conversion"
-  | "processing_conversion"
-  | "failed_conversion"
-  | "completed";
+  | "summarized";

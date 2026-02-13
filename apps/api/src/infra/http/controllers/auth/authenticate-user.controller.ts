@@ -1,5 +1,4 @@
-import { EntityNotFoundError } from "@echo/core";
-import { WrongPasswordError } from "@echo/core";
+import { EntityNotFoundError, WrongPasswordError } from "@echo/core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { makeAuthenticateUserUseCase } from "infra/factories/user/authenticate-user.factory";
 import z from "zod";

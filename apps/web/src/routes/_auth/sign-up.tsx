@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRegister, useSocialLogin, type Provider } from "@/hooks/useAuth";
+import { type Provider, useRegister, useSocialLogin } from "@/hooks/useAuth";
 import { type RegisterFormData, registerSchema } from "@/schemas/auth.schema";
 
 import { Divider } from "./-components/divider";
@@ -38,8 +38,7 @@ function RouteComponent() {
 	const onSubmit = async (data: RegisterFormData) => {
 		try {
 			await registerMutation.mutateAsync(data);
-			// Redireciona para o dashboard após cadastro bem-sucedido
-			navigate({ to: "/dashboard" });
+			navigate({ to: "/sign-in" });
 		} catch (error) {
 			console.error("Erro ao criar conta:", error);
 		}
